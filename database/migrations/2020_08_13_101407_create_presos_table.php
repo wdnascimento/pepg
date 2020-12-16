@@ -22,6 +22,7 @@ class CreatePresosTable extends Migration
             $table->string('mae');
             $table->string('artigos');
             $table->string('situacao');
+            $table->string('origem');
             $table->date('data_prisao');
             $table->date('data_depen');
             $table->date('data_entrada');

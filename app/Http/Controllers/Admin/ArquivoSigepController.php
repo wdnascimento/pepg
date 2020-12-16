@@ -11,14 +11,15 @@ use Auth;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ArquivoSigepController extends Controller
 {
     
-    public function __construct(ArquivoSigep $arquivo_sigeps)
+    public function __construct(ArquivoSigep $arquivo_sigeps, Preso $presos  )
     {
         
         $this->arquivo_sigep = $arquivo_sigeps;
-
+        $this->preso = $presos;
         // Default values
         $this->params['titulo']='Arquivo Sigep';
         $this->params['main_route']='admin.arquivo_sigep';
@@ -108,6 +109,8 @@ class ArquivoSigepController extends Controller
 
     public function import($id)
     {
+        $preso = 
+
         $this->params['subtitulo']='Importar Arquivo Sigep';
         $this->params['arvore']=[
            [
@@ -124,7 +127,31 @@ class ArquivoSigepController extends Controller
             $url = Storage::url($data->titulo);
             
            $csv = array_map('str_getcsv', file($url));
-            dd($csv);
+           array_shift($csv);
+           
+           $tmp_presos = [];
+
+           foreach ($csv as $i => $v){
+                $nome_prontuario = preg_split("/[\-]/", $v[0]);
+                $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0]);
+                $tmp_presos[$i]['nome']             = trim($nome_prontuario[1]);
+                $tmp_presos[$i]['rg']               =  trim($v[1]);
+                $tmp_presos[$i]['data_nascimento']  =  trim($v[2]);
+                $tmp_presos[$i]['mae']              =  trim($v[3]);
+                $tmp_presos[$i]['artigos']           =  trim($v[4]);
+                $tmp_presos[$i]['situacao']  =  trim($v[5]);
+                $alojamento =  preg_split("/(\/\s)/", $v[6]);
+                $tmp_presos[$i]['bloco']            =  trim($alojamento[0]);
+                $tmp_presos[$i]['galeria']          =  trim($alojamento[1]);
+                $tmp_presos[$i]['cubiculo']         =  trim($alojamento[2]);
+                $tmp_presos[$i]['origem']           =  trim($v[7]);
+                $tmp_presos[$i]['data_prisao']      =  trim($v[8]);
+                $tmp_presos[$i]['data_depen']=  trim($v[9]);
+                $tmp_presos[$i]['data_entrada']     =  trim($v[10]);
+
+           }
+
+           dd($tmp_presos);
        }
       
 
