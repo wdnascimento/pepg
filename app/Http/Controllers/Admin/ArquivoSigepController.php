@@ -13,6 +13,7 @@ use App\Models\PresoAlojamento;
 use Carbon\Carbon;
 use Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -106,14 +107,14 @@ class ArquivoSigepController extends Controller
            ]];
         $params = $this->params;
         $data = $this->arquivo_sigep->find($id);
+            // galerias 
+        $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
+      
         if($data->importado == 0){
             $url = Storage::url($data->titulo);
-            
-           $csv = array_map('str_getcsv', file($url));
-           array_shift($csv);
-           
-           $tmp_presos = [];
-
+            $csv = array_map('str_getcsv', file($url));
+            array_shift($csv);
+            $tmp_presos = [];
             foreach ($csv as $i => $v){
                 $nome_prontuario = preg_split("/[\-]/", $v[0]);
                 $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0]);
@@ -132,8 +133,8 @@ class ArquivoSigepController extends Controller
                 $tmp_presos[$i]['data_depen']       =  \Carbon\Carbon::parse(strtotime(trim($v[9])))->format('Y-m-d') ;
                 $tmp_presos[$i]['data_entrada']     =  \Carbon\Carbon::parse(strtotime(trim($v[10])))->format('Y-m-d') ;
                
-                $galerias = $this->galeria->where('titulo',$tmp_presos[$i]['galeria'])->first();
-
+                $galerias = array_search(strtoupper($tmp_presos[$i]['galeria']), array_column($GALERIAS, 'titulo'));
+      
                 if($galerias){
                     $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
 
@@ -147,7 +148,7 @@ class ArquivoSigepController extends Controller
                         }
                     }
 
-                    $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo('GALERIA A','205')->first();
+                    $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'] ,$tmp_presos[$i]['cubiculo'])->first();
 
                     if($tmp_presos[$i]['id'] && $cubiculo_id){
                         $alojamento_atual = $this->preso_alojamento->select('id','cubiculo_id')->where('preso_id',$tmp_presos[$i]['id'])->where('data_saida',NULL)->first();
@@ -179,10 +180,13 @@ class ArquivoSigepController extends Controller
                             $this->preso_alojamento->create($alojamento_preso);
                         }
                     }else{
-                        return redirect()->withErrors(['Error' => 'Erro ao importar'])->route($this->params['main_route'].'.index');
+                        return redirect()->back()->withErrors(['Erro ao importar']);
                     }
                 }
             }
+        }else{
+            return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
+            
         }
       
         return redirect()->route($this->params['main_route'].'.index');
