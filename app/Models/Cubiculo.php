@@ -9,6 +9,10 @@ class Cubiculo extends Model
     protected $fillable = ['galeria_id','numero','capacidade']; 
 
     function getCubiculoIdGaleriaCubiculo($galeria, $cubiculo){
-         return $this->join('galeria')->where('galerias.titulo',$galeria)->where('cubiculos.numero',$cubiculo);
+         return $this   ->join('galerias','galerias.id','cubiculos.galeria_id')
+                        ->select('cubiculos.id')
+                        ->where('galerias.titulo',$galeria)
+                        ->where('cubiculos.numero',$cubiculo)
+                        ->get();
     }
 }

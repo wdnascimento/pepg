@@ -45,8 +45,7 @@
                                     <td>{{ $item->usuario }}</td>
                                     <td>{{ $item->desc_importado }}</td>
                                     <td>
-                                        <a href="{{ route($params['main_route'].'.import', $item->id) }}" class="btn btn-info btn-xs"><span class="fas fa-edit"></span> Editar</a>
-                                        <a href="{{ route($params['main_route'].'.show', $item->id) }}" class="btn btn-danger btn-xs"><span class="fas fa-trash"></span> Ver / Deletar</a>
+                                        <a href="{{ route($params['main_route'].'.import', $item->id) }}" class="btn btn-info btn-xs"><span class="fas fa-edit"></span> Importar</a>
                                     </td>
                                 </tr>
                                 @endforeach

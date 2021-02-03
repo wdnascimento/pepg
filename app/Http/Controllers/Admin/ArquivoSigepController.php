@@ -92,32 +92,8 @@ class ArquivoSigepController extends Controller
         
     }
 
-    public function show($id,TableCode $codes)
-    {
-        $this->params['subtitulo']='Deletar Arquivo Sigep';
-        $this->params['arvore']=[
-           [
-               'url' => 'admin/arquivo_sigep',
-               'titulo' => 'Arquivo Sigep'
-           ],
-           [
-               'url' => '',
-               'titulo' => 'Deletar'
-           ]];
-       $params = $this->params;
-
-       $data = $this->arquivo_sigep->find($id);
-       $preload['controla_estoque'] = $codes->select(1);
-       $preload['tipo'] = $codes->select(3);
-       $preload['unidade_medida'] = $codes->select(4);
-
-       return view('admin.arquivo_sigep.show',compact('params','data','preload'));
-    }
-
     public function import($id)
     {
-        $preso = 
-
         $this->params['subtitulo']='Importar Arquivo Sigep';
         $this->params['arvore']=[
            [
@@ -128,9 +104,9 @@ class ArquivoSigepController extends Controller
                'url' => '',
                'titulo' => 'Cadastrar'
            ]];
-       $params = $this->params;
-       $data = $this->arquivo_sigep->find($id);
-       if($data->importado == 0){
+        $params = $this->params;
+        $data = $this->arquivo_sigep->find($id);
+        if($data->importado == 0){
             $url = Storage::url($data->titulo);
             
            $csv = array_map('str_getcsv', file($url));
@@ -158,7 +134,6 @@ class ArquivoSigepController extends Controller
                
                 $galerias = $this->galeria->where('titulo',$tmp_presos[$i]['galeria'])->first();
 
-
                 if($galerias){
                     $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
 
@@ -172,45 +147,45 @@ class ArquivoSigepController extends Controller
                         }
                     }
 
-                    dd($this->cubiculo->getCubiculoIdGaleriaCubiculo('GALERIA A','205'));
+                    $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo('GALERIA A','205')->first();
 
-                    // if($tmp_presos[$i]['id']){
-                    //     $alojamento = $this->preso_alojamento->select('id','cubiculo_id')->where('preso_id',$tmp_presos[$i]['id'])->where('data_saida',NULL)->first();
-                    //     if($alojamento){
-                    //         $cubiculo =  $this
-                    //                     ->galeria->select('titulo, numero')
-                    //                     ->join('cubiculos','galerias.id','cubiculos.galeria_id')
-                    //                     ->where('cubiculos.id',$alojamento['cubiculo_id'])
-                    //                     ->first();
-                    //         if((!$cubiculo['titulo'] ==  $tmp_presos[$i]['galeria']) || (!$cubiculo['numero'] ==   $tmp_presos[$i]['cubiculo'])){
-                    //             // SE O CUBÍCULO FOR DIFERENTE DO ATUAL;
-                    //             if($this->preso_alojamento->find($alojamento["id"])->update(['data_saida' => \Carbon\Carbon::now() ])){
-                                    
-                    //                 $result = $this->preso->create($tmp_presos[$i]);
-                    //             }else{
-                    //                 echo('erro');
-                    //             }
-                    //         }
+                    if($tmp_presos[$i]['id'] && $cubiculo_id){
+                        $alojamento_atual = $this->preso_alojamento->select('id','cubiculo_id')->where('preso_id',$tmp_presos[$i]['id'])->where('data_saida',NULL)->first();
+                        if($alojamento_atual){
+                            if($alojamento_atual['cubiculo_id'] != $cubiculo_id["id"] ){
+                                // SE O CUBÍCULO FOR DIFERENTE DO ATUAL;
+                                if($this->preso_alojamento->find($alojamento_atual["id"])->update(['data_saida' => \Carbon\Carbon::now() ])){
+                                    $alojamento_preso=[];
+                                    $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
+                                   // dd($cubiculo_id);
+                                    $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
+                                    $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
+        
+                                    $this->preso_alojamento->create($alojamento_preso);
 
-                    //         $cubiculo =  $this->galeria->where('titulo',$tmp_presos[$i]['galeria'])->with('cubiculos')->where('id',1)->first();
-                    //     }else{
-                    //         $cubiculo =  $this
-                    //                     ->galeria->select('cubiculos.id')
-                    //                     ->join('cubiculos','galerias.id','cubiculos.galeria_id')
-                    //                     ->where('galerias.titulo',$tmp_presos[$i]['galeria'])
-                    //                     ->where('cubiculos.numero',$tmp_presos[$i]['cubiculo'])
-                    //                     ->first();
+                                }else{
+                                    return redirect()->withErrors(['Error' => 'Erro ao importar'])->route($this->params['main_route'].'.index');
+                                }
+                            }
 
-                    //        // $this->alojamento->create();
-                    //     }
-                }else{
-                    echo('erros');
+                            $cubiculo =  $this->galeria->where('titulo',$tmp_presos[$i]['galeria'])->with('cubiculos')->where('id',1)->first();
+                        }else{
+                            $alojamento_preso=[];
+                            $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
+                           // dd($cubiculo_id);
+                            $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
+                            $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
+
+                            $this->preso_alojamento->create($alojamento_preso);
+                        }
+                    }else{
+                        return redirect()->withErrors(['Error' => 'Erro ao importar'])->route($this->params['main_route'].'.index');
+                    }
                 }
-               
             }
         }
-        dd();
-        return view('admin.arquivo_sigep.create',compact('params', 'data','preload'));
+      
+        return redirect()->route($this->params['main_route'].'.index');
     }
 
     public function update(ArquivoSigepRequest $request, $id)

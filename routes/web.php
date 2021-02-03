@@ -38,4 +38,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
     Route::post('galeria/store', 'GaleriaController@store')->name('admin.galeria.store');
     Route::put('galeria/update/{id}', 'GaleriaController@update')->name('admin.galeria.update');
     Route::delete('galeria/destroy/{id}', 'GaleriaController@destroy')->name('admin.galeria.destroy');
+
+    Route::get('ver_galeria',function(){
+        return view('admin.ver_galeria.index');
+    });
 });
