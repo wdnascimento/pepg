@@ -36,41 +36,30 @@
 
                     <div class="row">
                         {{--
-                            id, titulo, tipo, unidade_medida, controla_estoque
+                            id, tipo, unidade_id, titulo
                             --}}
-
-                            <div class="form-group col-12 col-md-12 col-lg-12">
-                                {{Form::label('titulo', 'Título')}}
-                                {{Form::text('titulo', $data->titulo,['class' => 'form-control', 'placeholder' => 'Título','readonly'])}}
-                            </div>
 
                             <div class="form-group col-12 col-md-12 col-lg-6">
                                 {{Form::label('tipo', 'Tipo')}}
                                 {{Form::select('tipo',
                                     $preload['tipo'],
                                     ((isset($data->tipo)) ? $data->tipo : null),
-                                    ['id'=>'tipo','class' =>'form-control','placeholder' => 'Selecione','disabled'])}}
+                                    ['id'=>'tipo','class' =>'form-control','placeholder' => 'Selecione','readonly' => 'readonly'])}}
                             </div>
                             <div class="form-group col-12 col-md-12 col-lg-6">
-                                {{Form::label('unidade_medida', 'Unidade de Medida')}}
-                                {{Form::select('unidade_medida',
-                                    $preload['unidade_medida'],
-                                    ((isset($data->unidade_medida)) ? $data->unidade_medida : null),
-                                    ['id'=>'unidade_medida','class' =>'form-control','placeholder' => 'Selecione', 'disabled'])}}
+                                {{Form::label('unidade', 'Unidade')}}
+                                {{Form::select('unidade_id',
+                                    $preload['unidade'],
+                                    ((isset($data->unidade)) ? $data->unidade : null),
+                                    ['id'=>'unidade','class' =>'form-control','placeholder' => 'Selecione','readonly' => 'readonly'])}}
                             </div>
-                            <div class="form-group col-12 col-md-12 col-lg-6">
-                                {{Form::label('controla_estoque', 'Controla Estoque?')}}
-                                {{Form::select('controla_estoque',
-                                    $preload['controla_estoque'],
-                                    ((isset($data->controla_estoque)) ? $data->controla_estoque : null),
-                                    ['id'=>'controla_estoque','class' =>'form-control','placeholder' => 'Selecione','disabled'])}}
+                            <div class="form-group col-12 col-md-12 col-lg-12">
+                                {{Form::label('titulo', 'Título')}}
+                                {{Form::text('titulo',null,['class' => 'form-control', 'placeholder' => 'Título','readonly' => 'readonly'])}}
                             </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-12 col-lg-6 d-flex justify-content-start">
-                            <a href="{{ route($params['main_route'].'.index') }}" class="btn btn-primary btn-sm"><span class="fas fa-arrow-left"></span>  Voltar</a>
-                        </div>
-                        <div class="form-group col-12 col-md-12 col-lg-6 d-flex justify-content-end">
+                        <div class="form-group col-12 col-md-12 col-lg-12 ">
                             {{ Form::open(['route' => [$params['main_route'].'.destroy',$data->id],'method' =>'DELETE']) }}
                             {{Form::submit('Deletar',['class'=>'btn btn-danger btn-sm'])}}
                             {{ Form::close() }}

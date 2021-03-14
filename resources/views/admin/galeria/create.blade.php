@@ -34,23 +34,44 @@
                         </div>
                     @endif
 
-                    {{ Form::open(['route' => $params['main_route'].'.store','method' =>'post' , 'enctype'=> 'multipart/form-data']) }}
+                    @if( isset($data))
+                        {{
+                            Form::model($data,[
+                                'route' => [$params['main_route'].'.update',$data->id]
+                                ,'class' => 'form'
+                                ,'method' => 'put'
+                            ])
+                        }}
+                    @else
+                        {{ Form::open(['route' => $params['main_route'].'.store','method' =>'post']) }}
+                    @endif
                     <div class="row">
                         {{--
-                            id, titulo, data_hora, importado, usuario, deleted_at, created_at, updated_at
+                            id, titulo, tipo, unidade_medida, controla_estoque
                             --}}
 
+                        <div class="form-group col-12 col-md-12 col-lg-6">
+                            {{Form::label('tipo', 'Tipo')}}
+                            {{Form::select('tipo',
+                                $preload['tipo'],
+                                ((isset($data->tipo)) ? $data->tipo : null),
+                                ['id'=>'tipo','class' =>'form-control','placeholder' => 'Selecione'])}}
+                        </div>
+                        <div class="form-group col-12 col-md-12 col-lg-6">
+                            {{Form::label('unidade', 'Unidade')}}
+                            {{Form::select('unidade_id',
+                                $preload['unidade'],
+                                ((isset($data->unidade)) ? $data->unidade : null),
+                                ['id'=>'unidade','class' =>'form-control','placeholder' => 'Selecione'])}}
+                        </div>
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            {{Form::label('file', 'Arquivo - Selecione o arquivo .CSV')}}
-                            {{Form::file('file',null,['class' => 'form-control','width' => '150', 'placeholder' => 'Arquivo'])}}
+                            {{Form::label('titulo', 'Título')}}
+                            {{Form::text('titulo',null,['class' => 'form-control', 'placeholder' => 'Título'])}}
                         </div>
-                        <div class="form-group col-12 alert alert-warning">
-                            Atenção!! Este arquivo deve conter a listagem gerada pelo SIGEP - Relatórios/Listagem por Cela
-                        </div>
+                        
                         <div class="form-group col-12 col-md-12 col-lg-12 pt-2">
                             {{Form::submit('Salvar',['class'=>'btn btn-success btn-sm'])}}
                         </div>
-                       
                     </div>
                     {{ Form::close() }}
                 </div>

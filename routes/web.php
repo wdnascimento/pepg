@@ -32,14 +32,20 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
     Route::put('arquivo_sigep/update/{id}', 'ArquivoSigepController@update')->name('admin.arquivo_sigep.update');
     Route::delete('arquivo_sigep/destroy/{id}', 'ArquivoSigepController@destroy')->name('admin.arquivo_sigep.destroy');
     
-    // Galerias
+   
+    //Galeria
     Route::get('galeria', 'GaleriaController@index')->name('admin.galeria.index');
     Route::get('galeria/create', 'GaleriaController@create')->name('admin.galeria.create');
     Route::post('galeria/store', 'GaleriaController@store')->name('admin.galeria.store');
+    Route::get('galeria/edit/{id}', 'GaleriaController@edit')->name('admin.galeria.edit');
+    Route::get('galeria/show/{id}', 'GaleriaController@show')->name('admin.galeria.show');
     Route::put('galeria/update/{id}', 'GaleriaController@update')->name('admin.galeria.update');
     Route::delete('galeria/destroy/{id}', 'GaleriaController@destroy')->name('admin.galeria.destroy');
+    Route::get('galerias', 'GaleriaController@galerias')->name('admin.galeria.galerias');
+    Route::get('galeria/{id}', 'GaleriaController@galeria')->name('admin.galeria.galeria');
 
-    Route::get('ver_galeria',function(){
-        return view('admin.ver_galeria.index');
-    });
+
+     //Presos
+     Route::get('preso', 'PresoController@index')->name('admin.preso.index');
+
 });

@@ -15,4 +15,9 @@ class Cubiculo extends Model
                         ->where('cubiculos.numero',$cubiculo)
                         ->get();
     }
+
+    public function presos()
+    {
+        return $this->hasMany(PresoAlojamento::class,'preso_alojamentos.cubiculo_id','id');
+    }
 }

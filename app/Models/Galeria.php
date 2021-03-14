@@ -12,6 +12,7 @@ class Galeria extends Model
     public function cubiculos()
     {
         return $this->hasMany(Cubiculo::class);
+
     }
     
     

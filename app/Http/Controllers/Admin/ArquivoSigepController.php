@@ -113,13 +113,12 @@ class ArquivoSigepController extends Controller
         // LIMPA ALOJAMENTOS 
         $desaloja =  $this->preso_alojamento->select('id')->where('data_saida',NULL)->update(['data_saida' => \Carbon\Carbon::now() ]);
            
-    //    if($desaloja != NULL){
+        if($desaloja !== NULL){
             if( $data->importado == 0){
                 $url = Storage::url($data->titulo);
                 $csv = array_map('str_getcsv', file($url));
                 array_shift($csv);
                 $tmp_presos = [];
-                $preso_alojamento =[];
                     
                 foreach ($csv as $i => $v){
                     $nome_prontuario = preg_split("/[\-]/", $v[0]);
@@ -147,8 +146,9 @@ class ArquivoSigepController extends Controller
 
                     // presos para alojar
                     
-                    if($galerias){
+                    if($galerias !== false){
 
+                      
                         // VERIFICA SE O PRESO ESTÁ CADASTRADO 
 
                         $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
@@ -172,22 +172,27 @@ class ArquivoSigepController extends Controller
                         $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
                         $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
 
-                        $preso_alojamento[]= $alojamento_preso;
+                   
+                        if(! $this->preso_alojamento->create($alojamento_preso)){
+                            return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
+                        }
                     }
                     $i++;
                                     
                 }
                 
-                if(! $this->preso_alojamento->create($preso_alojamento)){
-                    return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
-                }
+                
             }else{
                 return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
                 
             }
-        // }else{
-        //     return redirect()->back()->withErrors(['Erro ao importar, Desalojar os presos já importado anteriormente.']);
-        // }
+        }else{
+            return redirect()->back()->withErrors(['Erro ao importar, Desalojar os presos já importado anteriormente.']);
+        }
+
+        if(!$data->update(['importado' => 1])){
+            return redirect()->back()->withErrors(['Erro modificar status da importação.']);
+        }
       
         return redirect()->route($this->params['main_route'].'.index');
     }

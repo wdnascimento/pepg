@@ -236,13 +236,9 @@ return [
         [
             'text'       => 'Ver Galeria',
             'icon_color' => 'red',
-            'url'        => '#',
+            'url'        => 'admin/galerias',
         ],
-        [
-            'text'       => 'Cubículos',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
+       
         [
             'text'       => 'Galerias',
             'icon_color' => 'cyan',
@@ -251,7 +247,7 @@ return [
         [
             'text'       => 'Presos',
             'icon_color' => 'cyan',
-            'url'        => '#',
+            'url'        => 'admin/preso',
         ],
         [
             'text'       => 'Arquivos',
