@@ -109,85 +109,85 @@ class ArquivoSigepController extends Controller
         $data = $this->arquivo_sigep->find($id);
             // galerias 
         $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
-      
-        if($data->importado == 0){
-            $url = Storage::url($data->titulo);
-            $csv = array_map('str_getcsv', file($url));
-            array_shift($csv);
-            $tmp_presos = [];
-            foreach ($csv as $i => $v){
-                $nome_prontuario = preg_split("/[\-]/", $v[0]);
-                $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0]);
-                $tmp_presos[$i]['nome']             = trim($nome_prontuario[1]);
-                $tmp_presos[$i]['rg']               =  trim($v[1]);
-                $tmp_presos[$i]['data_nascimento']  =  \Carbon\Carbon::parse(strtotime(trim($v[2])))->format('Y-m-d') ;
-                $tmp_presos[$i]['mae']              =  trim($v[3]);
-                $tmp_presos[$i]['artigos']           =  trim($v[4]);
-                $tmp_presos[$i]['situacao']  =  trim($v[5]);
-                $alojamento =  preg_split("/(\/\s)/", $v[6]);
-                $tmp_presos[$i]['bloco']            =  trim($alojamento[0]);
-                $tmp_presos[$i]['galeria']          =  trim($alojamento[1]);
-                $tmp_presos[$i]['cubiculo']         =  trim($alojamento[2]);
-                $tmp_presos[$i]['origem']           =  trim($v[7]);
-                $tmp_presos[$i]['data_prisao']      =  \Carbon\Carbon::parse(strtotime(trim($v[8])))->format('Y-m-d') ;
-                $tmp_presos[$i]['data_depen']       =  \Carbon\Carbon::parse(strtotime(trim($v[9])))->format('Y-m-d') ;
-                $tmp_presos[$i]['data_entrada']     =  \Carbon\Carbon::parse(strtotime(trim($v[10])))->format('Y-m-d') ;
-               
-                $galerias = array_search(strtoupper($tmp_presos[$i]['galeria']), array_column($GALERIAS, 'titulo'));
-      
-                if($galerias){
-                    $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
 
-                    if($presos){
-                        $this->preso->find($presos["id"])->update($tmp_presos[$i]);
-                        $tmp_presos[$i]['id'] = $presos["id"];
-                    }else{
-                        $result = $this->preso->create($tmp_presos[$i]);
-                        if($result){
-                            $tmp_presos[$i]['id'] = $result->id;
-                        }
-                    }
+        // LIMPA ALOJAMENTOS 
+        $desaloja =  $this->preso_alojamento->select('id')->where('data_saida',NULL)->update(['data_saida' => \Carbon\Carbon::now() ]);
+           
+    //    if($desaloja != NULL){
+            if( $data->importado == 0){
+                $url = Storage::url($data->titulo);
+                $csv = array_map('str_getcsv', file($url));
+                array_shift($csv);
+                $tmp_presos = [];
+                $preso_alojamento =[];
+                    
+                foreach ($csv as $i => $v){
+                    $nome_prontuario = preg_split("/[\-]/", $v[0]);
+                    $prontuarios[]= trim($nome_prontuario[0]);
+                    $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0]);
+                    $tmp_presos[$i]['nome']             = trim($nome_prontuario[1]);
+                    $tmp_presos[$i]['rg']               =  trim($v[1]);
+                    $tmp_presos[$i]['data_nascimento']  =  \Carbon\Carbon::parse(strtotime(trim($v[2])))->format('Y-m-d') ;
+                    $tmp_presos[$i]['mae']              =  trim($v[3]);
+                    $tmp_presos[$i]['artigos']           =  trim($v[4]);
+                    $tmp_presos[$i]['situacao']  =  trim($v[5]);
+                    $alojamento =  preg_split("/(\/\s)/", $v[6]);
+                    $tmp_presos[$i]['bloco']            =  trim($alojamento[0]);
+                    $tmp_presos[$i]['galeria']          =  trim($alojamento[1]);
+                    $tmp_presos[$i]['cubiculo']         =  trim($alojamento[2]);
+                    $tmp_presos[$i]['origem']           =  trim($v[7]);
+                    $tmp_presos[$i]['data_prisao']      =  \Carbon\Carbon::parse(strtotime(trim($v[8])))->format('Y-m-d') ;
+                    $tmp_presos[$i]['data_depen']       =  \Carbon\Carbon::parse(strtotime(trim($v[9])))->format('Y-m-d') ;
+                    $tmp_presos[$i]['data_entrada']     =  \Carbon\Carbon::parse(strtotime(trim($v[10])))->format('Y-m-d') ;
+                
+                    // VERIFICA SE A GALERIA EXISTE
 
-                    $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'] ,$tmp_presos[$i]['cubiculo'])->first();
-
-                    if($tmp_presos[$i]['id'] && $cubiculo_id){
-                        $alojamento_atual = $this->preso_alojamento->select('id','cubiculo_id')->where('preso_id',$tmp_presos[$i]['id'])->where('data_saida',NULL)->first();
-                        if($alojamento_atual){
-                            if($alojamento_atual['cubiculo_id'] != $cubiculo_id["id"] ){
-                                // SE O CUBÍCULO FOR DIFERENTE DO ATUAL;
-                                if($this->preso_alojamento->find($alojamento_atual["id"])->update(['data_saida' => \Carbon\Carbon::now() ])){
-                                    $alojamento_preso=[];
-                                    $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
-                                   // dd($cubiculo_id);
-                                    $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
-                                    $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
+                    $galerias = array_search(strtoupper($tmp_presos[$i]['galeria']), array_column($GALERIAS, 'titulo'));
         
-                                    $this->preso_alojamento->create($alojamento_preso);
 
-                                }else{
-                                    return redirect()->withErrors(['Error' => 'Erro ao importar'])->route($this->params['main_route'].'.index');
-                                }
-                            }
+                    // presos para alojar
+                    
+                    if($galerias){
 
-                            $cubiculo =  $this->galeria->where('titulo',$tmp_presos[$i]['galeria'])->with('cubiculos')->where('id',1)->first();
+                        // VERIFICA SE O PRESO ESTÁ CADASTRADO 
+
+                        $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
+
+                        if($presos){
+                            $this->preso->find($presos["id"])->update($tmp_presos[$i]);
+                            $tmp_presos[$i]['id'] = $presos["id"];
                         }else{
-                            $alojamento_preso=[];
-                            $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
-                           // dd($cubiculo_id);
-                            $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
-                            $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
-
-                            $this->preso_alojamento->create($alojamento_preso);
+                            $result = $this->preso->create($tmp_presos[$i]);
+                            if($result){
+                                $tmp_presos[$i]['id'] = $result->id;
+                            }
                         }
-                    }else{
-                        return redirect()->back()->withErrors(['Erro ao importar']);
+
+                        // ALOJA O PRESO
+                        
+                        $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'] ,$tmp_presos[$i]['cubiculo'])->first();
+
+                        $alojamento_preso=[];
+                        $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
+                        $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
+                        $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
+
+                        $preso_alojamento[]= $alojamento_preso;
                     }
+                    $i++;
+                                    
                 }
+                
+                if(! $this->preso_alojamento->create($preso_alojamento)){
+                    return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
+                }
+            }else{
+                return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
+                
             }
-        }else{
-            return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
-            
-        }
+        // }else{
+        //     return redirect()->back()->withErrors(['Erro ao importar, Desalojar os presos já importado anteriormente.']);
+        // }
       
         return redirect()->route($this->params['main_route'].'.index');
     }
