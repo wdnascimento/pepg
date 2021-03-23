@@ -44,7 +44,6 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
     Route::get('galerias', 'GaleriaController@galerias')->name('admin.galeria.galerias');
     Route::get('galeria/{id}', 'GaleriaController@galeria')->name('admin.galeria.galeria');
 
-
      //Presos
      Route::get('preso', 'PresoController@index')->name('admin.preso.index');
 

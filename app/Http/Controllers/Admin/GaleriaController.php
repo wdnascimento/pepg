@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Galeria\GaleriaRequest;
+use App\Models\Cubiculo;
 use Illuminate\Http\Request;
 use App\Models\Galeria;
 use App\Models\PresoAlojamento;
@@ -12,11 +13,12 @@ use App\Models\Unidade;
 
 class GaleriaController extends Controller
 {
-    public function __construct(Galeria $galerias,Unidade $unidades, PresoAlojamento $presos_lojamento, TableCodes $tableCodes)
+    public function __construct(Galeria $galerias,Unidade $unidades,Cubiculo $cubiculos, PresoAlojamento $preso_alojamentos, TableCodes $tableCodes)
     {
         $this->galeria = $galerias;
         $this->unidade = $unidades; 
-        $this->preso_lojamento = $presos_lojamento;
+        $this->cubiculo = $cubiculos; 
+        $this->preso_alojamento = $preso_alojamentos;
         $this->tableCode = $tableCodes;
 
         // Default values
@@ -134,10 +136,26 @@ class GaleriaController extends Controller
                'titulo' => 'Galeria'
            ]];
        $params = $this->params;
-       $preload["unidade"] = $this->galeria->cubiculos()->presos()->get();
-            dd($preload);
+    //    $data["unidade"] = $this  ->cubiculo
+    //                                 ->where('cubiculos.galeria_id',$id)
+    //                                 ->presos()
+    //                                 ->orderBy('cubiculos.numero')
+    //                                 ->get()
+    //                                 ->toArray();
+    //      
+    
+    $data["unidade"] = $this  ->cubiculo->find(50)->with('presos')->get();
+    //                                 ->where('cubiculos.galeria_id',$id)
+    //                                 ->presos()
+    //                                 ->orderBy('cubiculos.numero')
+    //                                 ->get()
+    //                                 ->toArray();
+    //      
+    
 
-       return view('admin.galeria.create',compact('params', 'data','preload'));
+    dd($data);                       
+ 
+    return view('admin.ver_galeria.galeria',compact('params', 'data'));
     }
 
     public function edit($id, TableCodes $codes)

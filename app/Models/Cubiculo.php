@@ -8,7 +8,7 @@ class Cubiculo extends Model
 {
     protected $fillable = ['galeria_id','numero','capacidade']; 
 
-    function getCubiculoIdGaleriaCubiculo($galeria, $cubiculo){
+    public function getCubiculoIdGaleriaCubiculo($galeria, $cubiculo){
          return $this   ->join('galerias','galerias.id','cubiculos.galeria_id')
                         ->select('cubiculos.id')
                         ->where('galerias.titulo',$galeria)
@@ -18,6 +18,9 @@ class Cubiculo extends Model
 
     public function presos()
     {
-        return $this->hasMany(PresoAlojamento::class,'preso_alojamentos.cubiculo_id','id');
+        return $this    ->select('presos.nome')
+                        ->join('preso_alojamentos', 'cubiculos.id','preso_alojamentos.cubiculo_id')
+                        ->join('presos', 'preso_alojamentos.preso_id','presos.id')
+                        ->where('preso_alojamentos.data_saida',NULL);
     }
 }

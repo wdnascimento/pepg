@@ -97,7 +97,6 @@
         .GALERIA-B {
             width: 100%;
             height: 100%;
-            min-width: 350px;
             grid-area: GALERIA-B; 
             background-color: lightskyblue;
             justify-content: center;
