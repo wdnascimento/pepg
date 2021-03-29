@@ -16,6 +16,9 @@
                         <div class="col-6">
                             <h3 class="card-title">{{$params['subtitulo']}}</h3>
                         </div>
+                        <div class="col-6 text-right">
+                            <a href="{{ route($params['main_route'].'.galerias')}}" class="btn btn-primary btn-xs"><span class="fas fa-arrow-left"></span>  Voltar</a>
+                        </div>
                     </div>
 
                 </div>
