@@ -34,7 +34,7 @@ class GaleriaController extends Controller
         // PARAMS DEFAULT
         $this->params['subtitulo']='Galerias Cadastradas';
         $this->params['arvore'][0] = [
-                     'url' => 'admin/galeria',
+                     'url' => 'admin/galerias',
                      'titulo' => 'Galerias'
         ];
  
@@ -49,8 +49,8 @@ class GaleriaController extends Controller
         $this->params['subtitulo']='Cadastrar Gelerias';
         $this->params['arvore']=[
            [
-               'url' => 'admin/galeria',
-               'titulo' => 'Galeria'
+               'url' => 'admin/galerias',
+               'titulo' => 'Galerias'
            ],
            [
                'url' => '',
@@ -82,8 +82,8 @@ class GaleriaController extends Controller
         $this->params['subtitulo']='Deletar Galeria';
         $this->params['arvore']=[
            [
-               'url' => 'admin/galeria',
-               'titulo' => 'Galeria'
+               'url' => 'admin/galerias',
+               'titulo' => 'Galerias'
            ],
            [
                'url' => '',
@@ -102,7 +102,7 @@ class GaleriaController extends Controller
         $this->params['subtitulo']='Ver Galeria';
         $this->params['arvore']=[
            [
-               'url' => 'admin/galeria',
+               'url' => 'admin/galerias',
                'titulo' => 'Galerias'
            ],
            [
@@ -128,34 +128,22 @@ class GaleriaController extends Controller
         $this->params['subtitulo']='Ver Galeria';
         $this->params['arvore']=[
            [
-               'url' => 'admin/galeria',
-               'titulo' => 'Galeria'
+               'url' => 'admin/galerias',
+               'titulo' => 'Galerias'
            ],
            [
                'url' => '',
                'titulo' => 'Galeria'
            ]];
-       $params = $this->params;
-    //    $data["unidade"] = $this  ->cubiculo
-    //                                 ->where('cubiculos.galeria_id',$id)
-    //                                 ->presos()
-    //                                 ->orderBy('cubiculos.numero')
-    //                                 ->get()
-    //                                 ->toArray();
-    //      
-    
-    $data["unidade"] = $this  ->cubiculo->find(50)->with('presos')->get();
-    //                                 ->where('cubiculos.galeria_id',$id)
-    //                                 ->presos()
-    //                                 ->orderBy('cubiculos.numero')
-    //                                 ->get()
-    //                                 ->toArray();
-    //      
-    
-
-    dd($data);                       
- 
-    return view('admin.ver_galeria.galeria',compact('params', 'data'));
+        $params = $this->params;
+        $data["unidade"] = $this->cubiculo
+                                ->where("cubiculos.galeria_id", $id)
+                                ->with('presos')
+                                ->get()
+                                ->toArray();
+        $tmp_titulo = $this->galeria->find($id);
+        $data['titulo'] = $tmp_titulo->titulo; 
+        return view('admin.galeria.galeria',compact('params', 'data'));
     }
 
     public function edit($id, TableCodes $codes)
@@ -163,8 +151,8 @@ class GaleriaController extends Controller
         $this->params['subtitulo']='Editar Galeria';
         $this->params['arvore']=[
            [
-               'url' => 'admin/galeria',
-               'titulo' => 'Galeria'
+               'url' => 'admin/galerias',
+               'titulo' => 'Galerias'
            ],
            [
                'url' => '',

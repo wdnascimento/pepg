@@ -37,31 +37,29 @@
                             <h1 class="w-100 text-center">Galeria X</h1>
                             <div class="col-6 p-5 ">
                                 <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">111 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">112 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">113 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">114 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">115 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">116 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">117 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">118 <span class="badge badge-primary badge-pill">0</span></li>
-                                        </ul>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">110 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">109 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">108 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">107 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">106 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">105 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">104 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">103 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">102 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">101 <span class="badge badge-primary badge-pill">0</span></li>
+                                </ul>                                
                             </div>
                             <div class="col-6 p-5  ">
-                            
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">110 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">109 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">108 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">107 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">106 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">105 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">104 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">103 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">102 <span class="badge badge-primary badge-pill">0</span></li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">101 <span class="badge badge-primary badge-pill">0</span></li>
-                                        </ul>
-                                
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">111 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">112 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">113 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">114 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">115 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">116 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">117 <span class="badge badge-primary badge-pill">0</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">118 <span class="badge badge-primary badge-pill">0</span></li>
+                                </ul>
                             </div>
                         </div>
                     </div>

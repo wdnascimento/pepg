@@ -22,10 +22,10 @@
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-5 ">
                     <div class="grid-container">
-                        <div class="GALERIA-A">GALERIA A</div>
+                        <div id="1" class="GALERIA GALERIA-A" >GALERIA A</div>
                         <div class="CONTROLE">CONTROLE<BR>INTERNO</div>
-                        <div class="GALERIA-C">GALERIA C</div>
-                        <div class="GALERIA-B">GALERIA B</div>
+                        <div id="3" class="GALERIA GALERIA-C">GALERIA C</div>
+                        <div id="2" class="GALERIA GALERIA-B">GALERIA B</div>
                       </div>                    
                 </div>
                 <!-- /.card-body -->
@@ -51,19 +51,15 @@
             width: 100%;
         }
 
-        .GALERIA-A { 
-            grid-area: GALERIA-B;
-            background-color: lightskyblue;
-            width: 100%;
-            height: 100%;
-            min-height: 350px;
-            grid-area: GALERIA-A; 
+        .GALERIA{
             background-color: lightskyblue;
             justify-content: center;
             display: grid;
             align-items: center;
             font-weight: bold;
-            font-size: 2em;
+            font-size: 2ex;
+            text-align: center;
+            cursor: pointer;
         }
 
         .CONTROLE { 
@@ -71,48 +67,51 @@
             background-color: red;
             width: 100%;
             height: 100%;
-            justify-content: center;
             display: grid;
+            justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 2em;
-            text-align: center;
-            
+            font-size: 2ex;
+        }
+
+        .GALERIA-A { 
+            grid-area: GALERIA-A; 
+            width: 100%;
+            height: 100%;
+            min-height: 25ex;
+        }
+
+        .GALERIA-B {
+            grid-area: GALERIA-B; 
+            width: 100%;
+            height: 100%;
+            min-height: 50ex;
         }
 
         .GALERIA-C { 
             grid-area: GALERIA-C;
-            background-color: lightskyblue;
             width: 100%;
             height: 100%;
-            min-width: 350px;
-            justify-content: center;
-            display: grid;
-            align-items: center;
-            font-weight: bold;
-            font-size: 2em;
-        
-        }
+            min-height: 25ex;
+        }   
 
-        .GALERIA-B {
-            width: 100%;
-            height: 100%;
-            grid-area: GALERIA-B; 
-            background-color: lightskyblue;
-            justify-content: center;
-            display: grid;
-            align-items: center;
-            font-weight: bold;
-            font-size: 2em;
+        .GALERIA:hover{
+            background-color: blue;
+            opacity: 0.8;
+            transition: 0.3s;
+            color: #ffffff;
         }
-
 
     </style>
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
     <script>
-      
+        $('.GALERIA').on('click',function(){
+            window.location.href = 'galeria/'+this.id;
+        });
+            
+       
     </script>
 @stop

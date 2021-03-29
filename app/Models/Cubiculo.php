@@ -18,9 +18,6 @@ class Cubiculo extends Model
 
     public function presos()
     {
-        return $this    ->select('presos.nome')
-                        ->join('preso_alojamentos', 'cubiculos.id','preso_alojamentos.cubiculo_id')
-                        ->join('presos', 'preso_alojamentos.preso_id','presos.id')
-                        ->where('preso_alojamentos.data_saida',NULL);
+        return $this->belongsToMany(Preso::class,'preso_alojamentos','cubiculo_id','preso_id')->where('preso_alojamentos.data_saida',NULL);
     }
 }
