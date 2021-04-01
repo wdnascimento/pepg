@@ -31,7 +31,7 @@ class IndexController extends Controller
         $this->params['subtitulo']='';
 
         $params = $this->params;
-        $data['galeria'] = $this->galeria->count();
+        $data['total_presos'] = $this->galeria->totalPresos();
         $data['preso'] = $this->preso->count();
         $data['cubiculo'] = $this->cubiculo->count();
 

@@ -110,16 +110,6 @@ class GaleriaController extends Controller
                'titulo' => 'Ver'
            ]];
         $params = $this->params;
-       
-        // $data["total"] = $this  ->select('galerias.titulo',DB::raw('COUNT(preso_alojamentos.cubiculo_id)')->preso_lojamento
-        //                         ->join('cubiculos','cubiculos.id','preso_alojamentos.cubiculos_id')
-        //                         ->join('galerias','galerias.id','cubiculos.galeria_id')
-        //                         ->where('preso_alojamentos.data_saida', NULL)
-        //                         ->groupBy('galerias.id')
-        //                         ->get();
-        
-        //  $data = $this->galeria->find($id);
-
         return view('admin.galeria.galerias', compact('params'));
     }
 
@@ -142,7 +132,9 @@ class GaleriaController extends Controller
                                 ->get()
                                 ->toArray();
         $tmp_titulo = $this->galeria->find($id);
+        
         $data['titulo'] = $tmp_titulo->titulo; 
+        $data['total_presos'] =  $this->galeria->totalPresos($id);
         return view('admin.galeria.galeria',compact('params', 'data'));
     }
 

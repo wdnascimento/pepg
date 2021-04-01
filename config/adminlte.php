@@ -188,7 +188,7 @@ return [
 
     'use_route_url' => false,
 
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin',
 
     'logout_url' => 'logout',
 
@@ -239,11 +239,11 @@ return [
             'url'        => 'admin/galerias',
         ],
        
-        [
-            'text'       => 'Galerias',
-            'icon_color' => 'cyan',
-            'url'        => 'admin/galeria',
-        ],
+        // [
+        //     'text'       => 'Galerias',
+        //     'icon_color' => 'cyan',
+        //     'url'        => 'admin/galeria',
+        // ],
         [
             'text'       => 'Presos',
             'icon_color' => 'cyan',
