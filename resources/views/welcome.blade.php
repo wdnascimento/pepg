@@ -5,10 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
-
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+        
         <!-- Styles -->
         <style>
             html, body {
@@ -63,7 +64,12 @@
             }
         </style>
     </head>
+
     <body>
+        <div id="app">
+            <example-component></example-component>
+        
+        </div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -97,4 +103,7 @@
             </div>
         </div>
     </body>
+
+    <script src="{{ asset('js/app.js') }}"></script>
+    
 </html>

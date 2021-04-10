@@ -15,7 +15,11 @@
 </template>
 
 <script>
+    
     export default {
+        created(){
+            console.log('entrou')
+        },
         mounted() {
             console.log('Component mounted.')
         }
