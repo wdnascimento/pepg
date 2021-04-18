@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="container">
             <b-jumbotron >
-                <template #header tex>
+                <template #header >
              Atendimentos</template>
             </b-jumbotron>
 
@@ -15,10 +15,10 @@
                     >
                     <b-form-input
                         id="input-1"
+                        name="input-1"
                         v-model="form.prontuario"
-                        type="prontuario"
+                        
                         placeholder="Enter prontuario"
-                        required
                         >
                     </b-form-input>
                 </b-form-group>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+// <!-- v-validate="{required: true}" -->
     
     export default {
         data() {
@@ -52,14 +53,15 @@
                 event.preventDefault()
                 axios.get("http://pepg.localhost/api/presos/102265")
                 .then(function(res){
-                    this.data.prontuario= res.data.prontuario;
-                    this.data.nome= res.nome;
+                    console.log(res);
+                    // this.data.prontuario= res.data.prontuario;
+                    // this.data.nome= res.nome;
                 })
                 .catch(function(err){
                     console.log(err);
                 })
                 
-                alert(JSON.stringify(this.form))
+            //    alert(JSON.stringify(this.form))
             },
             onReset(event) {
                 event.preventDefault()
