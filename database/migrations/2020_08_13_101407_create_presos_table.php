@@ -16,6 +16,7 @@ class CreatePresosTable extends Migration
         Schema::create('presos', function (Blueprint $table) {
             $table->id();
             $table->integer('prontuario');
+            $table->integer('kit');
             $table->string('nome');
             $table->string('rg');
             $table->date('data_nascimento');

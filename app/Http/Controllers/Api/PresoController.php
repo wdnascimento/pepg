@@ -9,16 +9,31 @@ use PHPUnit\Util\Json;
 
 class PresoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Preso $presos, $prontuario)
     {
         return $presos->where('prontuario',$prontuario)->get();
     }
 
+    public function uploadFile(Request $request){
+        $request->validate([
+        'audio' => 'required|mimes:mp3|max:2048'
+        ]);
+
+        if($request->file()) {
+            $name = time().'_'.$request->audio->getClientOriginalName();
+            $filePath = $request->file('audio')->storeAs('uploads', $name, 'public');
+
+            return back()
+            ->with('success','File has uploaded to the database.')
+            ->with('file', $name);
+        }
+   }
+    
+    
+    
+    
+    
+    
     /**
      * Store a newly created resource in storage.
      *

@@ -53,4 +53,14 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
     Route::get('preso/por_cubiculo', 'CubiculoController@presosPorCubiculo')->name('admin.preso.por_cubiculo');
 
 
+    //Setor
+    Route::get('setor', 'SetorController@index')->name('admin.setor.index');
+    Route::get('setor/create', 'SetorController@create')->name('admin.setor.create');
+    Route::post('setor/store', 'SetorController@store')->name('admin.setor.store');
+    Route::get('setor/edit/{id}', 'SetorController@edit')->name('admin.setor.edit');
+    Route::get('setor/show/{id}', 'SetorController@show')->name('admin.setor.show');
+    Route::put('setor/update/{id}', 'SetorController@update')->name('admin.setor.update');
+    
+
+
 });

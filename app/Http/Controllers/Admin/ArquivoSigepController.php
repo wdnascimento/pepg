@@ -111,15 +111,16 @@ class ArquivoSigepController extends Controller
         $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
 
         // LIMPA ALOJAMENTOS 
-        $desaloja =  $this->preso_alojamento->select('id')->where('data_saida',NULL)->update(['data_saida' => \Carbon\Carbon::now() ]);
-           
+        $desaloja =  $this->preso_alojamento->where('data_saida',NULL)->delete(['data_saida' => \Carbon\Carbon::now() ]);
+        
         if($desaloja !== NULL){
             if( $data->importado == 0){
                 $url = Storage::url($data->titulo);
                 $csv = array_map('str_getcsv', file($url));
                 array_shift($csv);
                 $tmp_presos = [];
-                    
+                $alojamento_preso=[];
+                $presos = $this->preso->all();
                 foreach ($csv as $i => $v){
                     $nome_prontuario = preg_split("/[\-]/", $v[0]);
                     $prontuarios[]= trim($nome_prontuario[0]);
@@ -165,23 +166,23 @@ class ArquivoSigepController extends Controller
 
                         // ALOJA O PRESO
                         
-                        $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'] ,$tmp_presos[$i]['cubiculo'])->first();
+                         $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'] ,$tmp_presos[$i]['cubiculo'])->first();
 
-                        $alojamento_preso=[];
-                        $alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
-                        $alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
-                        $alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
+                        $tmp_alojamento_preso= [];
+                        $tmp_alojamento_preso["preso_id"]= $tmp_presos[$i]['id'];
+                        $tmp_alojamento_preso["cubiculo_id"]=  $cubiculo_id["id"]; 
+                        $tmp_alojamento_preso["data_entrada"]= \Carbon\Carbon::now()->setTimezone('America/Sao_Paulo');
 
-                   
-                        if(! $this->preso_alojamento->create($alojamento_preso)){
-                            return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
-                        }
+                        array_push($alojamento_preso,$tmp_alojamento_preso) ;
+                        
+                        
                     }
                     $i++;
                                     
                 }
-                
-                
+                if(! $this->preso_alojamento->insert($alojamento_preso)){
+                    return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
+                }
             }else{
                 return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
                 

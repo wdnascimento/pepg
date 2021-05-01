@@ -7,9 +7,11 @@
 require('./bootstrap');
 import AudioRecorder from 'vue-audio-recorder'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import VueResource from 'vue-resource';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 window.Vue = require('vue');
 
@@ -28,6 +30,7 @@ window.Vue = require('vue');
 Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
 Vue.use(AudioRecorder)
 Vue.use(BootstrapVue)
+Vue.use(VueResource);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,9 +40,9 @@ Vue.use(BootstrapVue)
 
 const app = new Vue({
     el: '#app',
-    methods: {
-        callback (data) {
-          console.debug(data)
-        }
-      }
+    mounted: function () {
+      console.log('w');
+      console.log(this.$http);
+      console.log('w');
+    }
 });

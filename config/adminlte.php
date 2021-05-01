@@ -254,6 +254,11 @@ return [
             'icon_color' => 'cyan',
             'url'        => 'admin/arquivo_sigep',
         ],
+        [
+            'text'       => 'Setores',
+            'icon_color' => 'cyan',
+            'url'        => 'admin/setor',
+        ],
 
     ],
 

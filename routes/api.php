@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'Api'],function(){
 
-    Route::get('presos/{prontuario}', 'PresoController@index')->name('api.preso.index');
+    Route::get('preso/{prontuario}', 'PresoController@index')->name('api.preso.index');
+    Route::post('preso/audio', 'PresoController@uploadFile')->name('api.preso.audio');
 
 });

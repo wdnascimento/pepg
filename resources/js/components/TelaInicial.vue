@@ -1,61 +1,112 @@
 <template>
     <div id="app" class="container">
-            <b-jumbotron >
-                <template #header >
-             Atendimentos</template>
-            </b-jumbotron>
+        <div class="row text-center py-2">
+            <h1 class="w-100">Marcar Atendimentos</h1>    
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <b-card class="h-100" >
+                    <b-form @submit="onSubmit" @reset="onReset" >
+                        <b-form-group
+                            id="input-group-1"
+                            label="Digite o PRONTUÁRIO ou KIT:"
+                            label-for="input-1"
+                            description=""
+                            label-class="text-center"
+                            >
+                            <b-form-input
+                                id="input-1"
+                                name="input-1"
+                                v-model="form.prontuario"
+                                class="text-center h1"
+                                style="font-size: 2em"
+                                placeholder="PRONT. OU KIT"
+                                >
+                            </b-form-input>
+                        </b-form-group>
+                    </b-form>
+                </b-card>
+            </div>
+            <div class="col-8">
+                <b-card v-if="form.show">
+                    <div class="row px-2">
+                        <div class="col-4">
+                            <b-avatar v-bind:src="preso.foto" size="8rem"></b-avatar>
+                        </div>
+                        <div class="col-8">
+                            <p class="h2"  >Prontuário: <strong>{{ preso.prontuario }}</strong> </p>
+                            <p class="h2" >Nome: {{ preso.nome }}</p>
+                        </div>
+                    </div>
+                </b-card>
+            </div>
+        </div>
+          
+        
+        <b-alert v-if="(!form.show)" show variant="primary">Nenhum preso selecionado.</b-alert>
+        <b-button v-if="form.show" variant="success">Marcar Atendimentos</b-button>
 
-        <b-card>
-            <b-form @submit="onSubmit" @reset="onReset" >
-                <b-form-group
-                    id="input-group-1"
-                    label="Digite o PRONTUÁRIO ou KIT:"
-                    label-for="input-1"
-                    description=""
-                    >
-                    <b-form-input
-                        id="input-1"
-                        name="input-1"
-                        v-model="form.prontuario"
-                        
-                        placeholder="Enter prontuario"
-                        >
-                    </b-form-input>
-                </b-form-group>
-            </b-form>
-        </b-card>
-        <b-card>
-            <p >{{ preso.prontuario }}</p>
-            <p >{{ preso.nome }}</p>
-        </b-card>
-
-    </div>
+            <audio-recorder
+            upload-url="http://pepg.localhost/api/preso/audio"
+            :attempts="3"
+            :time="2"
+            :headers="{}"
+            :before-recording="callbackTeste"
+            :pause-recording="callbackTeste"
+            :after-recording="callbackTeste"
+            :select-record="callbackTeste"
+            :before-upload="callbackTeste"
+            :successful-upload="callbackTeste"
+            :failed-upload="callbackTeste"/>
+            </div>
 </template>
 
 <script>
 // <!-- v-validate="{required: true}" -->
-    
+
+       
     export default {
         data() {
             return {
                 form: {
                     prontuario: '',
-                    show: true
+                    show: false
                 },
                 preso: {
-                    nome: 'nome',
-                    prontuario : '000'
+                    id : 0,
+                    prontuario : 0,
+                    kit : 0,
+                    nome: '',
+                    foto : '',
                 }
             }
         },
         methods: {
+            
+            callbackTeste(e){
+              console.log(e);
+            },
             onSubmit(event) {
                 event.preventDefault()
-                axios.get("http://pepg.localhost/api/presos/102265")
-                .then(function(res){
-                    console.log(res);
-                    // this.data.prontuario= res.data.prontuario;
-                    // this.data.nome= res.nome;
+                axios.get("http://pepg.localhost/api/preso/"+this.form.prontuario)
+                .then(res => {
+                    console.log(res.data);
+                    if(res.data.length){
+                        this.preso.id= res.data[0].id;
+                        this.preso.kit= res.data[0].kit;
+                        this.preso.prontuario= res.data[0].prontuario;
+                        this.preso.nome= res.data[0].nome;
+                        this.preso.foto= 'http://www.spr.depen.pr.gov.br/centralvagas/exibirFoto.jpg?numProntuario='+res.data[0].prontuario+'&idImagem=1';
+                        this.form.show = true; 
+                    }else{
+                        this.preso.id= 0;
+                        this.preso.prontuario= 0;
+                        this.preso.kit= 0;
+                        this.preso.nome= '';
+                        this.preso.foto= '';
+                        this.form.show = false; 
+                   }
+                  
                 })
                 .catch(function(err){
                     console.log(err);
@@ -66,7 +117,8 @@
             onReset(event) {
                 event.preventDefault()
                 // Reset our form values
-                this.form.prontuario = ''
+                this.form.prontuario = '';
+                this.form.show= false;
             }
         },
         mounted() {
