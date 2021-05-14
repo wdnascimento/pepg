@@ -5,7 +5,7 @@
  */
 
 require('./bootstrap');
-import AudioRecorder from 'vue-audio-recorder'
+// import AudioRecorder from 'vue-audio-recorder'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueResource from 'vue-resource';
 
@@ -28,7 +28,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
-Vue.use(AudioRecorder)
+// Vue.use(AudioRecorder)
 Vue.use(BootstrapVue)
 Vue.use(VueResource);
 
@@ -40,9 +40,5 @@ Vue.use(VueResource);
 
 const app = new Vue({
     el: '#app',
-    mounted: function () {
-      console.log('w');
-      console.log(this.$http);
-      console.log('w');
-    }
+    
 });

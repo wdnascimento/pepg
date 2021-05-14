@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Atendimento\AtendimentoRequest;
 use App\Models\Preso;
 use Illuminate\Http\Request;
 use PHPUnit\Util\Json;
@@ -22,12 +23,17 @@ class PresoController extends Controller
         if($request->file()) {
             $name = time().'_'.$request->audio->getClientOriginalName();
             $filePath = $request->file('audio')->storeAs('uploads', $name, 'public');
+            return response()->json(['filename' => $name]);
 
-            return back()
-            ->with('success','File has uploaded to the database.')
-            ->with('file', $name);
+            
         }
-   }
+        return response()->json(['name' => 'Abigail', 'state' => 'CA']);
+
+    }
+
+    public function saveAtendimento(AtendimentoRequest $request){
+
+    }
     
     
     

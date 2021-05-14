@@ -47,25 +47,28 @@
         <b-button v-if="form.show" variant="success">Marcar Atendimentos</b-button>
 
             <audio-recorder
-            upload-url="http://pepg.localhost/api/preso/audio"
-            :attempts="3"
-            :time="2"
-            :headers="{}"
+            upload-url="https://10.37.15.160/api/preso/audio"
+            :attempts="1"
+            :time=".1"
+            :headers="headers"
             :before-recording="callbackTeste"
             :pause-recording="callbackTeste"
             :after-recording="callbackTeste"
             :select-record="callbackTeste"
-            :before-upload="callbackTeste"
-            :successful-upload="callbackTeste"
-            :failed-upload="callbackTeste"/>
+            :before-upload="beforeUpload"
+            :successful-upload="sucessUpload"
+            :failed-upload="faliedUpload"/>
             </div>
 </template>
 
 <script>
-// <!-- v-validate="{required: true}" -->
-
+    /* Audio Record Plugin */
+    import AudioRecorder from 'vue-audio-recorder'
+    /* Audio Record Plugin */
+    Vue.use(AudioRecorder)
        
     export default {
+        
         data() {
             return {
                 form: {
@@ -79,16 +82,27 @@
                     nome: '',
                     foto : '',
                 }
+                
             }
         },
         methods: {
             
+            faliedUpload(){
+                alert('Error');
+            },
+            beforeUpload(data){
+                alert('iniciou');
+            },
+            sucessUpload(data){
+                console.log(data);
+ 
+            },
             callbackTeste(e){
               console.log(e);
             },
             onSubmit(event) {
                 event.preventDefault()
-                axios.get("http://pepg.localhost/api/preso/"+this.form.prontuario)
+                axios.get("https://10.37.15.160/api/preso/"+this.form.prontuario)
                 .then(res => {
                     console.log(res.data);
                     if(res.data.length){
@@ -111,8 +125,18 @@
                 .catch(function(err){
                     console.log(err);
                 })
-                
+
+            
             //    alert(JSON.stringify(this.form))
+            },
+            salvarAtendimento(){
+                axios.get("https://10.37.15.160/api/preso")
+                .then(res=>{}
+
+                )
+               .catch(function(err){
+                    console.log(err);
+                })
             },
             onReset(event) {
                 event.preventDefault()
@@ -120,9 +144,7 @@
                 this.form.prontuario = '';
                 this.form.show= false;
             }
-        },
-        mounted() {
-            console.log('Component mounted.')
         }
+       
     }
 </script>

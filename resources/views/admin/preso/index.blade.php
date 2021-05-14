@@ -41,9 +41,7 @@
                                 <!-- id, titulo, data_hora, importado, usuario, deleted_at, created_at, updated_at -->
                                 @foreach ($data as $item)
                                 <tr>
-                                    <td>
-                                        <img src="http://www.spr.depen.pr.gov.br/centralvagas/exibirFoto.jpg?numProntuario={{ $item->prontuario}}&idImagem=1" alt="">
-                                        </td>
+                                    <td><img src="http://www.spr.depen.pr.gov.br/centralvagas/exibirFoto.jpg?numProntuario={{ $item->prontuario}}&idImagem=1" alt=""></td>
                                     <td>{{ $item->prontuario}}</td>
                                     <td>{{ $item->nome}}</td>
                                     <td>{{ $item->galeria}}</td>
