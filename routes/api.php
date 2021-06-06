@@ -28,5 +28,8 @@ Route::group(['namespace' => 'Api'],function(){
     Route::get('preso/{prontuario}', 'PresoController@index')->name('api.preso.index');
     Route::post('preso/audio', 'PresoController@uploadFile')->name('api.preso.audio');
     Route::post('atendimento', 'AtendimentoController@store')->name('api.atendimento.create');
+    Route::post('atendimento/salvaratendimento', 'AtendimentoController@saveAtendimento')->name('api.atendimento.salvar');
+    Route::get('setor/listar/{preso_id}', 'SetorController@index')->name('api.setor.listar');
+    Route::get('parametro/{titulo}', 'ParametroController@index')->name('api.parametro');
 
 });

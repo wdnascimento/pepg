@@ -20,6 +20,11 @@ class CreateAtendimentosTable extends Migration
             $table->unsignedBigInteger('setor_id');
           
             $table->string('url_audio');
+            $table->string('url_audio_resposta')->nullable()->default(NULL);
+            $table->text('resposta_texto')->nullable()->default(NULL);
+
+            $table->integer('respondido')->nullable()->default(0);
+            $table->integer('lido')->nullable()->default(0);
             
             $table->foreign('preso_id')->references('id')->on('presos');
             $table->foreign('setor_id')->references('id')->on('setors');

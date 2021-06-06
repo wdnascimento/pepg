@@ -111,7 +111,7 @@ class ArquivoSigepController extends Controller
         $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
 
         // LIMPA ALOJAMENTOS 
-        $desaloja =  $this->preso_alojamento->where('data_saida',NULL)->delete(['data_saida' => \Carbon\Carbon::now() ]);
+        $desaloja =  $this->preso_alojamento->where('data_saida',NULL)->delete();
         
         if($desaloja !== NULL){
             if( $data->importado == 0){

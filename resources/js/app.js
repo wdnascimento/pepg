@@ -9,6 +9,7 @@ require('./bootstrap');
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueResource from 'vue-resource';
 
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -28,6 +29,8 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
+
+
 // Vue.use(AudioRecorder)
 Vue.use(BootstrapVue)
 Vue.use(VueResource);

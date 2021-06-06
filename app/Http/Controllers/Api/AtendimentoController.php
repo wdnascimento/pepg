@@ -15,36 +15,19 @@ class AtendimentoController extends Controller
         $this->atendimento = $atendimentos;
     }
 
-    public function store(AtendimentoRequest $request)
-    {
-    //     public function uploadFile(Request $request){
-    //         $request->validate([
-    //         'audio' => 'required|mimes:mp3|max:2048'
-    //         ]);
+   
+
+
+    public function saveAtendimento(AtendimentoRequest $request){
+        $atendimento['url_audio'] = $request->url_audio;
+        $atendimento['preso_id'] = $request->preso_id;
+        $atendimento['setor_id'] = $request->setor_id;
+        
+        if($this->atendimento->create($atendimento)){
+            return response()->json(['response' => true, 'message' => 'Atendimento registrado com sucesso']);
+        }
+        return response()->json(['response' => false, 'message' => 'Erro gravar atendimento.']);
+    }
     
-    //         if($request->file()) {
-    //             $name = time().'_'.$request->audio->getClientOriginalName();
-    //             $filePath = $request->file('audio')->storeAs('uploads', $name, 'public');
-    
-    //             return back()
-    //             ->with('success','File has uploaded to the database.')
-    //             ->with('file', $name);
-    //         }
-    //    }
-    }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
 }
