@@ -1,47 +1,35 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
-// import AudioRecorder from 'vue-audio-recorder'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueResource from 'vue-resource';
-
+import router from './js/Router'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+   
 
 window.Vue = require('vue');
 
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
 Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
+Vue.component('atendimentos', require('./components/Atendimentos.vue').default);
+Vue.component('marcar-atendimento', require('./components/MarcarAtendimento.vue').default);
 
-
-// Vue.use(AudioRecorder)
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 Vue.use(VueResource);
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+
+ /* Audio Record Plugin */
+ import AudioRecorder from 'vue-audio-recorder';
+ import Toasted from 'vue-toasted';
+ /* Audio Record Plugin */
+ Vue.use(AudioRecorder);
+ Vue.use(Toasted);
+
+
+
 
 const app = new Vue({
+    toasted : Toasted,
+    router,
     el: '#app',
-    
 });

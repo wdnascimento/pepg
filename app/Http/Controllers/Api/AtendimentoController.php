@@ -28,6 +28,17 @@ class AtendimentoController extends Controller
         }
         return response()->json(['response' => false, 'message' => 'Erro gravar atendimento.']);
     }
+
+    public function atendimentoPresoId($preso_id){
+        $atendimentos = $this   ->atendimento
+                                ->select('atendimentos.*','setors.titulo')
+                                ->join('setors','atendimentos.setor_id','setors.id')
+                                ->where('setors.preso_id',$preso_id)
+                                ->limit(15)
+                                ->get();
+
+                                return response()->json($atendimentos);
+    }
     
 
 }

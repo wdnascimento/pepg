@@ -1,5 +1,6 @@
 <template>
     <div id="app" class="container">
+        
         <div class="row text-center py-2">
             <h1 class="w-100">Marcar Atendimentos</h1>    
         </div>
@@ -28,7 +29,7 @@
                 </b-card>
             </div>
             <div class="col-12">
-                <b-card v-if="form.show">
+                <b-card v-if="preso.show">
                     <div class="row px-2">
                         <div class="col-4 center">
                             <b-avatar v-bind:src="preso.foto" class="justify-content-center" size="6rem"></b-avatar>
@@ -42,39 +43,25 @@
             </div>
         </div>
         <div class="row">  
-            <div v-if="(!form.show)" class="col-12">
+            <div v-if="(!preso.show)" class="col-12">
                 <b-alert  show variant="primary" class="text-center">Nenhum preso selecionado.</b-alert>
             </div>   
-            <div v-if="form.show" class="col-6 pt-3">
-                <b-button  variant="success" @click="buscarSetores" class="w-100 p-3 h2">Marcar Atendimentos</b-button>
+            <div v-if="preso.show" class="col-6 pt-3">
+                <router-link to="/marcaratendimento" class="btn btn-success w-100 p-3 h2" >Marcar Atendimentos</router-link>
             </div>
-            <div v-if="form.show" class="col-6 pt-3">
-                <b-button  variant="primary" class="w-100 p-3 h2" >Resposta de Atendimentos</b-button>
-            </div>
-        </div>
-        <div v-if="form.show_setores" class="row">
-            <div  v-for="setor in setores" :key="setor.id" class="col-3 pt-3 w-100">
-                <b-button  variant="warning" @click="selecionaSetor(setor.id,setor.titulo)"  class="setor w-100 p-3 h2"> {{setor.titulo}} </b-button>
-            </div>
-            <div v-if="form.show" class="col-12 p-2">
-                <h2  v-if="(atendimento.setor_id != null)" class="w-100 text-center" >
-                    Setor <strong>{{atendimento.titulo}}</strong> selecionado.
-                </h2>
+            <div v-if="preso.show" class="col-6 pt-3">
+                <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 h2" >Resposta de Atendimentos</router-link>
             </div>
         </div>
-        
-        
-        <audio-recorder v-if="form.show_audio"
-                    upload-url="https://10.37.15.160/api/preso/audio"
-                    :attempts="1"
-                    :time=".5"
-                    :successful-upload="sucessUpload"
-                    :failed-upload="faliedUpload"/>
+        <router-view :preso="this.preso"></router-view>
+         <!-- <atendimentos :atendimento="{ setor_id : 5 , titulo: 'Enfermaria' }"></atendimentos> -->
         <div class="row" >  
             <div  class="col-12">
                  <b-button  variant="danger" @click="limparCampos" class="w-100 p-3 h2">SAIR</b-button>
             </div>   
         </div>
+
+        
         
     </div>
 </template>
@@ -85,13 +72,7 @@
     }
 </style>
 <script>
-    /* Audio Record Plugin */
-    import AudioRecorder from 'vue-audio-recorder'
-    import Toasted from 'vue-toasted';
-    /* Audio Record Plugin */
-    Vue.use(AudioRecorder)
-    Vue.use(Toasted)
-       
+   
     export default {
         
         data() {
@@ -101,9 +82,7 @@
                 },
                 form: {
                     prontuario: '',
-                    show: false ,
-                    show_setores: false ,
-                    show_audio : false
+                    
                 },
                 preso: {
                     id : 0,
@@ -111,12 +90,9 @@
                     kit : 0,
                     nome: '',
                     foto : '',
+                    show: false ,
                 },
-                atendimento: {
-                    setor_id : null,
-                    titulo: "",
-                },
-                setores : []
+                active : ''
             }
         },
         created(){
@@ -147,27 +123,17 @@
             // EVENTOS
             // -----------------------------------
             
-            
-            faliedUpload(){
-                this.$toasted.show("Erro ao Carregar Audio!!", { 
-                    theme: "toasted-primary", 
-                    position: "top-right", 
-                    duration : 2000
-                });
+            marcarAtendimentos(){
+                    this.$router.push({
+                        path: '/marcaratendimento'
+                    });
+                
             },
 
-            wait(){
-                 this.$toasted.show("Aguarde....", { 
-                    theme: "toasted-primary", 
-                    position: "top-right", 
-                    duration : 2000
-                });
-            },
-
-            selecionaSetor(id,titulo){
-                this.atendimento.setor_id = id;
-                this.atendimento.titulo = titulo;
-                this.form.show_audio = true;
+            buscarAtendimentos(){
+                    this.$router.push({
+                        path: '/buscaratendimentos'
+                    });
                 
             },
 
@@ -178,32 +144,16 @@
                 this.preso.kit= 0;
                 this.preso.nome= '';
                 this.preso.foto= '';
-                this.form.show = false; 
-                this.form.show_setores = false;
-                this.form.show_audio = false;
-                this.setores =[];
-                this.atendimento.setor_id = null;
-                this.atendimento.titulo = "";
             },
 
-            
-
-            sucessUpload(res){
-                this.salvarAtendimento(res.data.data);
-            },
             onReset(event) {
                 event.preventDefault()
                 // Reset our form values
                 this.form.prontuario = '';
-                this.form.show= false;
+                this.preso.show= false;
             },
             
-            limparSetores(){
-                this.atendimento.setor_id = null;
-                this.atendimento.titulo = "";
-                this.form.show_audio = false;
-                this.setores = [];
-            },
+            
 
             
             // -----------------------------------
@@ -211,75 +161,11 @@
             // -----------------------------------
            
 
-            buscarSetores(){
-                this.limparSetores();          
-                axios.get("https://10.37.15.160/api/setor/listar/"+this.preso.id)
-                .then(res => {
-                    console.log(res);
-                    if(res.data.response == false){
-                         this.$toasted.show(res.data.message, { 
-                                theme: "toasted-primary", 
-                                position: "top-right", 
-                                duration : 2000
-                            });
-                            this.limparSetores();
+            
 
-                    }else{
-                        if(res.data.length){
-                            this.setores = res.data;
-                            this.form.show_setores = true;
-                        }else{
-                            this.$toasted.show("Nenhum setor habilitado para atendimento.", { 
-                                theme: "toasted-primary", 
-                                position: "top-right", 
-                                duration : 2000
-                            });
-                            
-                            this.limparSetores();
-                        
-                        }
-                    }
-                })
-                .catch(function(err){
-                    this.$toasted.show("Erro!!"+err, { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
-                })            
-            }, 
-
-            salvarAtendimento(url_audio){
-                
-                axios.post("https://10.37.15.160/api/atendimento/salvaratendimento",{
-                    
-                        preso_id : this.preso.id,
-                        setor_id : this.atendimento.setor_id ,
-                        url_audio : url_audio,
-
-                })
-                .then(res=>{
-                    this.buscarSetores();
-                    this.$toasted.show("Atendimento salvo com sucesso!!", { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
-                }
-
-                )
-               .catch(function(err){
-                    this.$toasted.show("Erro!!"+err, { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
-                })
-            },
-
+            
             onSubmit(event) {
                 event.preventDefault();
-                this.limparSetores();
                 axios.get("https://10.37.15.160/api/preso/"+this.form.prontuario)
                 .then(res => {
                    
@@ -289,7 +175,7 @@
                         this.preso.prontuario= res.data[0].prontuario;
                         this.preso.nome= res.data[0].nome;
                         this.preso.foto= 'http://www.spr.depen.pr.gov.br/centralvagas/exibirFoto.jpg?numProntuario='+res.data[0].prontuario+'&idImagem=1';
-                        this.form.show = true; 
+                        this.preso.show = true; 
                     }else{
                          this.$toasted.show("Prontuário ou KIT INVÁLIDO.", { 
                             theme: "toasted-primary", 
@@ -308,8 +194,6 @@
                     });
                 })
 
-            
-            //    alert(JSON.stringify(this.form))
             }
             
         }
