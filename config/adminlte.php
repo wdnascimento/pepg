@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'PPGS',
-    'title_prefix' => '',
-    'title_postfix' => '',
+    'title' => 'PEPG-US',
+    'title_prefix' => 'PEPG',
+    'title_postfix' => 'US',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>PEPG</b>US',
+    'logo_img' => 'img/logo_depen.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    'logo_img_alt' => 'PEPG',
 
     /*
     |--------------------------------------------------------------------------
@@ -196,7 +196,7 @@ return [
 
     'register_url' => false,
 
-    'password_reset_url' => 'password/reset',
+    'password_reset_url' => false,
 
     'password_email_url' => 'password/email',
 
@@ -234,29 +234,39 @@ return [
         
         ['header' => 'PEPG-us'],
         [
-            'text'       => 'Ver Galeria',
-            'icon_color' => 'red',
+            'text'       => 'Ver Galerias',
+            'icon' => 'far fa-building',
+            'class'      => 'p-1',
             'url'        => 'admin/galerias',
         ],
        
-        // [
-        //     'text'       => 'Galerias',
-        //     'icon_color' => 'cyan',
-        //     'url'        => 'admin/galeria',
-        // ],
         [
             'text'       => 'Presos',
-            'icon_color' => 'cyan',
-            'url'        => 'admin/preso',
-        ],
-        [
-            'text'       => 'Arquivos',
-            'icon_color' => 'cyan',
-            'url'        => 'admin/arquivo_sigep',
-        ],
+            'icon' => 'fas fa-user-lock',
+            'class'      => 'p-1',
+            'submenu' => [
+                [
+                    'text'       => 'Listagem',
+                    'icon' => 'fas fa-list-ol',
+                    'url'        => 'admin/preso',
+                ],
+                [
+                    'text'       => 'Foto',
+                    'icon' => 'fas fa-camera',
+                    'url'        => 'admin/preso/foto',
+                ],
+                [
+                    'text'       => 'Arquivos SIGEP',
+                    'icon' => 'fas fa-upload',
+                    'url'        => 'admin/arquivo_sigep',
+                ],
+            ],
+            
+        ],   
+       
         [
             'text'       => 'Setores',
-            'icon_color' => 'cyan',
+            'icon' => 'fas fa-sitemap',
             'url'        => 'admin/setor',
         ],
 

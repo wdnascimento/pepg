@@ -51,8 +51,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
      //Presos
     Route::get('preso', 'PresoController@index')->name('admin.preso.index');
     Route::get('preso/por_cubiculo', 'CubiculoController@presosPorCubiculo')->name('admin.preso.por_cubiculo');
-
-
+    Route::get('preso/foto', 'PresoController@fotos')->name('admin.preso.foto');
+    Route::get('preso/edit/{id}', 'PresoController@edit')->name('admin.preso.edit');
+    Route::post('preso/store', 'PresoController@store')->name('admin.preso.store');
+    
     //Setor
     Route::get('setor', 'SetorController@index')->name('admin.setor.index');
     Route::get('setor/create', 'SetorController@create')->name('admin.setor.create');

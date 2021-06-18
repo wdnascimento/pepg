@@ -3,18 +3,19 @@
             <div  v-for="setor in setores" :key="setor.id" class="col-3 pt-3 w-100">
                 <b-button  variant="warning" @click="selecionaSetor(setor.id,setor.titulo)"  class="setor w-100 p-3 h2"> {{setor.titulo}} </b-button>
             </div>
-            <!-- <div v-if="form.show" class="col-12 p-2">
+            <div v-if="atendimento.show" class="col-12 p-2">
                 <h2  v-if="(atendimento.setor_id != null)" class="w-100 text-center" >
                     Setor <strong>{{atendimento.titulo}}</strong> selecionado.
                 </h2>
-            </div> -->
-            
-            <audio-recorder 
+            </div>
+            <div v-if="atendimento.show" class="col-12 p-2 d-flex justify-content-center">
+                <audio-recorder class="d-flex"
                         upload-url="https://10.37.15.160/api/preso/audio"
                         :attempts="1"
                         :time=".5"
                         :successful-upload="sucessUpload"
                         :failed-upload="faliedUpload"/>
+            </div>
         </div>
         
         
@@ -37,6 +38,7 @@
                 atendimento: {
                     setor_id : null,
                     titulo: "",
+                    show: false,
                 },
             }
         },
@@ -44,6 +46,7 @@
             this.buscarSetores();
         },
         mounted() {
+            console.log('Component Marcar Atendimentos mounted.')
             console.log(this.preso);
         },
         methods: {
@@ -63,7 +66,6 @@
                     }else{
                         if(res.data.length){
                             this.setores = res.data;
-                            console.log(this.setores);
                         }else{
                             Vue.toasted.show("Nenhum setor habilitado para atendimento.", { 
                                 theme: "toasted-primary", 
@@ -88,12 +90,14 @@
             selecionaSetor(id,titulo){
                 this.atendimento.setor_id = id;
                 this.atendimento.titulo = titulo;
+                this.atendimento.show = true;
             },
 
             limparSetores(){
                 this.atendimento.setor_id = null;
                 this.atendimento.titulo = "";
                 this.setores = [];
+                this.atendimento.show = false;
             },
 
             faliedUpload(){

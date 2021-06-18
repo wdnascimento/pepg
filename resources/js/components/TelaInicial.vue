@@ -53,8 +53,8 @@
                 <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 h2" >Resposta de Atendimentos</router-link>
             </div>
         </div>
-        <router-view :preso="this.preso"></router-view>
-         <!-- <atendimentos :atendimento="{ setor_id : 5 , titulo: 'Enfermaria' }"></atendimentos> -->
+        <router-view v-if="preso.show" :preso="this.preso"></router-view>
+        
         <div class="row" >  
             <div  class="col-12">
                  <b-button  variant="danger" @click="limparCampos" class="w-100 p-3 h2">SAIR</b-button>
@@ -72,7 +72,6 @@
     }
 </style>
 <script>
-   
     export default {
         
         data() {
@@ -85,9 +84,9 @@
                     
                 },
                 preso: {
-                    id : 0,
-                    prontuario : 0,
-                    kit : 0,
+                    id : null,
+                    prontuario : null,
+                    kit : null,
                     nome: '',
                     foto : '',
                     show: false ,
@@ -110,7 +109,7 @@
                 
             })
             .catch(function(err){
-                this.$toasted.show("Erro ao Carregar Parametros!!"+err, { 
+                this.$toasted.show("Erro ao Carregar Parametros!!", { 
                     theme: "toasted-primary", 
                     position: "top-right", 
                     duration : 2000
@@ -138,12 +137,18 @@
             },
 
             limparCampos(){
-                this.preso.id= 0;
-                this.preso.prontuario= 0;
+                this.preso.id= null;
+                this.preso.prontuario= null;
                 this.form.prontuario = "";
-                this.preso.kit= 0;
+                this.preso.kit= null;
                 this.preso.nome= '';
                 this.preso.foto= '';
+                this.preso.show = false; 
+                
+            },
+
+            initRoute() {
+                this.$router.push('/');
             },
 
             onReset(event) {
@@ -165,6 +170,7 @@
 
             
             onSubmit(event) {
+                this.initRoute();
                 event.preventDefault();
                 axios.get("https://10.37.15.160/api/preso/"+this.form.prontuario)
                 .then(res => {

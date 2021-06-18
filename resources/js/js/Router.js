@@ -7,10 +7,15 @@ Vue.use(Router)
 
 export default new Router({
     mode : 'hash',
-    routes: [{
+    routes: [
+        {
+            path :'/',
+        },
+        {
             path :'/marcaratendimento',
             component : MarcarAtendimento
-        },{
+        },
+        {
             path: '/buscaratendimentos',
             component : Atendimentos
         }

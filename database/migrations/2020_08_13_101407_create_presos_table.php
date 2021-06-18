@@ -27,6 +27,7 @@ class CreatePresosTable extends Migration
             $table->date('data_prisao');
             $table->date('data_depen');
             $table->date('data_entrada');
+            $table->string('url_foto',255);            
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@ class ArquivoSigepController extends Controller
         ];
 
         $params = $this->params;
-        $data = $this->arquivo_sigep->all();
+        $data = $this->arquivo_sigep->orderBy('data_hora','desc')->limit(15)->get();
         return view('admin.arquivo_sigep.index',compact('params','data'));
     }
 

@@ -17,14 +17,13 @@
 <script>
     
     export default {
-        // props: {
-        //     atendimento: Object
-        // },
-        created(){
-            console.log('entrou')
+        props: {
+             preso: Object
         },
+       
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component Atendimentos mounted.')
+            console.log(this.preso);
         }
     }
 </script>
