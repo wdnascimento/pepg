@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Atendimento\AtendimentoRequest;
 use App\Models\Atendimento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AtendimentoController extends Controller
 {
@@ -31,12 +32,12 @@ class AtendimentoController extends Controller
 
     public function atendimentoPresoId($preso_id){
         $atendimentos = $this   ->atendimento
-                                ->select('atendimentos.*','setors.titulo')
+                                ->select('atendimentos.*', 'setors.titulo',DB::raw("DATE_FORMAT(atendimentos.created_at,'%d/%m/%Y') as data_atendimento"))
                                 ->join('setors','atendimentos.setor_id','setors.id')
-                                ->where('setors.preso_id',$preso_id)
+                                ->where('atendimentos.preso_id',$preso_id)
                                 ->limit(15)
+                                ->orderBy('created_at','DESC')
                                 ->get();
-
                                 return response()->json($atendimentos);
     }
     

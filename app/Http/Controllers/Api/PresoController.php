@@ -23,7 +23,7 @@ class PresoController extends Controller
 
         if($request->file()) {
             $name = time().'_'.$request->audio->getClientOriginalName();
-            $filePath = $request->file('audio')->storeAs('uploads', $name, 'public');
+            $filePath = $request->file('audio')->storeAs('audio/atendimentos', $name, 'public');
             if(!$filePath){
                 return response()->json(['response' => false, 'message' => 'Erro ao carregar o arquivo.']);
             }

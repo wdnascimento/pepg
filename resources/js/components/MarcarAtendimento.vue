@@ -17,9 +17,6 @@
                         :failed-upload="faliedUpload"/>
             </div>
         </div>
-        
-        
-    </div>
     <div v-else class="col-12">
         <b-alert  show variant="primary" class="text-center">Nenhum Setor Habilitado.</b-alert>
     </div>
@@ -45,10 +42,7 @@
         created(){
             this.buscarSetores();
         },
-        mounted() {
-            console.log('Component Marcar Atendimentos mounted.')
-            console.log(this.preso);
-        },
+        
         methods: {
             buscarSetores(){
                 this.limparSetores();

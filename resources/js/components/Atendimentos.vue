@@ -1,15 +1,32 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <!-- {{ atendimento.setor_id }}     -->
-                </div>
+    <div class="container">
+        <div v-for="atendimento in atendimentos" :key="atendimento.id" class="row">
+            <div class="col-12">
+                <div class="card w-100">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6 text-left"> <h3>Setor: {{ atendimento.titulo }}</h3> </div>
+                            <div class="col-6 text-right"> <h3>Data: {{ atendimento.data_atendimento }}</h3> </div>
+                            
+                        </div>
+                    </div>
 
-                <div class="card-body">
-                     <!-- {{ atendimento.titulo }} -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div v-if="atendimento.url_audio" class="col-12 pt-2 text-center">
+                                <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio"/>
+                            </div>
+                            <div v-if="atendimento.resposta_texto != ''" class="col-12 pt-2 text-justify">
+                                {{ atendimento.resposta_texto }}
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                    
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -20,10 +37,52 @@
         props: {
              preso: Object
         },
-       
+
+        data(){
+            return {
+                atendimentos : [],
+                rootPath : 'https://10.37.15.160/storage/audio/atendimentos/',
+            }
+        },
+            
+            
+        
         mounted() {
-            console.log('Component Atendimentos mounted.')
-            console.log(this.preso);
-        }
+            console.log('Component Atendimentos mounted.');
+            this.buscarAtendimentos();
+        },
+        
+        methods: {
+            buscarAtendimentos(){
+
+                axios.get("https://10.37.15.160/api/atendimento/preso/"+this.preso.id)
+                .then(res => {
+                    if(res.data.response == false){
+                         Vue.toasted.show(res.data.message, { 
+                                theme: "toasted-primary", 
+                                position: "top-right", 
+                                duration : 2000
+                            });
+                    }else{
+                        if(res.data.length){
+                            this.atendimentos = res.data;
+                        }else{
+                            Vue.toasted.show("Nenhum setor habilitado para atendimento.", { 
+                                theme: "toasted-primary", 
+                                position: "top-right", 
+                                duration : 2000
+                            });
+                        }
+                    }
+                })
+                .catch(function(err){
+                    Vue.toasted.show("Erro!!"+err, { 
+                        theme: "toasted-primary", 
+                        position: "top-right", 
+                        duration : 2000
+                    });
+                })            
+            }, 
+        },
     }
 </script>
