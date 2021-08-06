@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', config('admin.title'))
@@ -17,7 +18,7 @@
                             <h3 class="card-title">{{$params['subtitulo']}}</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="{{ route($params['main_route'].'.create')}}" class="btn btn-primary btn-xs"><span class="fas fa-plus"></span> Novo Cadastro</a>
+                            {{-- <a href="{{ route($params['main_route'].'.create')}}" class="btn btn-primary btn-xs"><span class="fas fa-plus"></span> Novo Cadastro</a> --}}
                         </div>
                     </div>
 
@@ -29,23 +30,23 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Titulo</th>
-                                <th>Responsável</th>
-                                <th>Atend. Virtual</th>
+                                <th>Preso</th>
+                                <th>Data</th>
+                                <th>Respondido</th>
+                                <th>Lido</th>
                                 <th></th>
-
                             </tr>
                             </thead>
                             <tbody>
                                 <!-- id, titulo, data_hora, importado, usuario, deleted_at, created_at, updated_at -->
                                 @foreach ($data as $item)
                                 <tr>
-                                    <td>{{ $item->titulo}}</td>
-                                    <td>{{ $item->responsavel}}</td>
-                                    <td>{{ $item->desc_atendimento_online}}</td>
-                                    <td>
-                                        <a href="{{ route($params['main_route'].'.edit', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-edit"></span> Editar</a> 
-                                        {{-- <a href="{{ route($params['main_route'].'.show', $item->id) }}" class="btn btn-danger btn-xs"><span class="fas fa-trash"></span> Deletar</a>  --}}
+                                    <td>{{ $item->nome}}</td>
+                                    <td>{{ $item->data_atendimento}}</td>
+                                    <td>{{ $item->desc_respondido}}</td>
+                                    <td>{{ $item->desc_lido }}<td>
+                                        {{-- <a href="{{ route($params['main_route'].'.edit', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-edit"></span> Editar</a>  --}}
+                                        <a href="{{ route($params['main_route'].'.responder', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-list"></span> Responder</a> 
                                     </td>
                                 </tr>
                                 @endforeach

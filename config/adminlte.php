@@ -265,9 +265,23 @@ return [
         ],   
        
         [
-            'text'       => 'Setores',
-            'icon' => 'fas fa-sitemap',
-            'url'        => 'admin/setor',
+            'text'  => 'Setores',
+            'icon'  => 'fas fa-sitemap',
+            'class' => 'p1',
+            'submenu' => [
+                [
+                    'text'       => 'Cadastro',
+                    'icon' => 'fas fa-list-ol',
+                    'url'        => 'admin/setor',
+                    
+                ],
+                [
+                    'text'       => 'Atendimentos',
+                    'icon' => 'fas fa-microphone',
+                    'url'        => 'admin/setor/atendimento',
+                ],
+                
+            ],
         ],
 
     ],

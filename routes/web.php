@@ -63,6 +63,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth','namespace' => 'Admin']
     Route::get('setor/show/{id}', 'SetorController@show')->name('admin.setor.show');
     Route::put('setor/update/{id}', 'SetorController@update')->name('admin.setor.update');
     
-
-
+    //Atendimentos
+    Route::get('setor/atendimento', 'AtendimentoController@index')->name('admin.atendimento.index');
+    Route::get('setor/atendimento/setor/{id}', 'AtendimentoController@atendimentoSetor')->name('admin.atendimento.setor');
+    Route::get('setor/atendimento/responder/{id}', 'AtendimentoController@responder')->name('admin.atendimento.responder');
+    Route::put('setor/atendimento/{id}', 'AtendimentoController@update')->name('admin.atendimento.update');
+    
 });

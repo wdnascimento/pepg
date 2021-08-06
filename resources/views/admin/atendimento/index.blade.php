@@ -17,7 +17,7 @@
                             <h3 class="card-title">{{$params['subtitulo']}}</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="{{ route($params['main_route'].'.create')}}" class="btn btn-primary btn-xs"><span class="fas fa-plus"></span> Novo Cadastro</a>
+                            {{-- <a href="{{ route($params['main_route'].'.create')}}" class="btn btn-primary btn-xs"><span class="fas fa-plus"></span> Novo Cadastro</a> --}}
                         </div>
                     </div>
 
@@ -29,11 +29,11 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Titulo</th>
-                                <th>Responsável</th>
-                                <th>Atend. Virtual</th>
+                                <th>Setor</th>
+                                <th>Solicitações</th>
+                                <th>Respostas</th>
+                                <th>Percentual</th>
                                 <th></th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -41,11 +41,16 @@
                                 @foreach ($data as $item)
                                 <tr>
                                     <td>{{ $item->titulo}}</td>
-                                    <td>{{ $item->responsavel}}</td>
-                                    <td>{{ $item->desc_atendimento_online}}</td>
+                                    <td>{{ $item->quantidade}}</td>
+                                    <td>{{ $item->respondido}}</td>
                                     <td>
-                                        <a href="{{ route($params['main_route'].'.edit', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-edit"></span> Editar</a> 
-                                        {{-- <a href="{{ route($params['main_route'].'.show', $item->id) }}" class="btn btn-danger btn-xs"><span class="fas fa-trash"></span> Deletar</a>  --}}
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ $item->percentual}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                          </div>
+                                        </td>
+                                    <td>
+                                        {{-- <a href="{{ route($params['main_route'].'.edit', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-edit"></span> Editar</a>  --}}
+                                        <a href="{{ route($params['main_route'].'.setor', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-list"></span> Listar</a> 
                                     </td>
                                 </tr>
                                 @endforeach
