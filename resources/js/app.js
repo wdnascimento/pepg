@@ -13,6 +13,7 @@ window.Vue = require('vue');
 Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
 Vue.component('atendimentos', require('./components/Atendimentos.vue').default);
 Vue.component('marcar-atendimento', require('./components/MarcarAtendimento.vue').default);
+Vue.component('responder-atendimento', require('./components/ResponderAtendimento.vue').default);
 
 Vue.use(BootstrapVue);
 Vue.use(VueResource);

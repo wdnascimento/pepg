@@ -42,30 +42,39 @@
                                 ,'method' => 'put'
                             ])
                         }}
-                    @else
-                        {{ Form::open(['route' => $params['main_route'].'.store','method' =>'post']) }}
                     @endif
-                    <div class="row">
-                        {{--
-                            id, titulo, atendimento_online, responsavel, created_at, updated_at
-                            --}}
-                        
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            {{Form::label('titulo', 'Título')}}
-                            {{Form::text('titulo',null,['class' => 'form-control', 'placeholder' => 'Título'])}}
+                    @if( $params['tipo']=='audio')
+
+                        <div id="app" class="row">
+                            <div class="d-flex w-100 p-2 justify-content-center">
+                                <audio-player class="d-flex" src="https://10.37.15.160/storage/audio/atendimentos/{{$data["url_audio"]}}"/></audio-player>
+                            </div>
+                            <div class="d-flex w-100 p-2 justify-content-center">
+                                <responder-atendimento atendimento_id="{{$data["id"]}}"></responder-atendimento>
+                            </div>
                         </div>
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            {{Form::label('responsavel', 'Responsável')}}
-                            {{Form::text('responsavel',null,['class' => 'form-control', 'placeholder' => 'Responsável'])}}
+                    @else
+                        <div id="app" class="row">
+                            <div class="d-flex w-100 p-2 justify-content-center">
+                                <audio-player class="d-flex" src="https://10.37.15.160/storage/audio/atendimentos/{{$data["url_audio"]}}"/></audio-player>
+                            </div>
+                            
+                            {{--
+                                id, titulo, atendimento_online, responsavel, created_at, updated_at
+                            --}}       
+                            <div class="form-group col-12 col-md-12 col-lg-12">
+                                {{Form::hidden('lido', '1')}}
+                                {{Form::hidden('respondido', '1')}}
+                                {{Form::label('resposta_texto', 'Resposta Texto')}}
+                                {{Form::textarea('resposta_texto',null,['class' => 'form-control', 'placeholder' => 'Resposta'])}}
+                            </div>
+                            <div class="form-group col-12 col-md-12 col-lg-12 pt-2">
+                                {{Form::submit('Salvar',['class'=>'btn btn-success btn-sm'])}}
+                            </div>  
                         </div>
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            {{Form::label('atendimento_online', 'Atendimento On-line')}}<br>
-                            {{Form::checkbox('atendimento_online')}}
-                        </div>
-                        <div class="form-group col-12 col-md-12 col-lg-12 pt-2">
-                            {{Form::submit('Salvar',['class'=>'btn btn-success btn-sm'])}}
-                        </div>
-                    </div>
+                            
+                    @endif
+                    
                     {{ Form::close() }}
                 </div>
                 <!-- /.card-body -->
@@ -79,8 +88,10 @@
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
+    <link rel="stylesheet" href="{{ asset('css/app.css')}}">
 @stop
 
 @section('js')
     <script src="{{ asset('js/scripts.js')}}" ></script>
+    <script src="{{ asset('js/app.js')}}" ></script>
 @stop

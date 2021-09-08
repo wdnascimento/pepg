@@ -1,0 +1,67 @@
+<template>
+  
+                <audio-recorder class="d-flex"
+                        upload-url="https://10.37.15.160/api/preso/audio"
+                        :attempts="1"
+                        :time=".5"
+                        :successful-upload="sucessUpload"
+                        :failed-upload="faliedUpload"
+                        />
+  </template>
+
+<script>
+
+    export default {
+            props: {
+                id: Number
+            },
+            methods: {
+                sucessUpload(res){
+                    this.salvarAtendimento(res.data.data);
+                },
+
+                salvarAtendimento(url_audio){
+                    
+                    axios.post("https://10.37.15.160/api/atendimento/salvarrespostaatendimento",{
+                            
+                            atendimento_id : 39,
+                            lido : 1,
+                            respondido : 1,
+                            url_audio_resposta : url_audio,
+
+                    })
+                    .then(res=>{
+                        this.buscarSetores();
+                        Vue.toasted.show("Atendimento salvo com sucesso!!", { 
+                            theme: "toasted-primary", 
+                            position: "top-right", 
+                            duration : 2000
+                        });
+                    }
+
+                    )
+                    .catch(function(err){
+                            Vue.toasted.show("Erro!!"+err, { 
+                                theme: "toasted-primary", 
+                                position: "top-right", 
+                                duration : 2000
+                            });
+                    })
+                },
+                faliedUpload(){
+                    Vue.toasted.show("Erro ao Carregar Audio!!", { 
+                        theme: "toasted-primary", 
+                        position: "top-right", 
+                        duration : 2000
+                    });
+                },
+            }
+            
+       
+       
+    }
+</script>
+
+<style>
+
+</style>

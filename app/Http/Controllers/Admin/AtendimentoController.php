@@ -82,65 +82,41 @@ class AtendimentoController extends Controller
                      'titulo' => 'Atendimentos'
         ];
  
+        $this->params['tipo'] = 'texto';
         $params = $this->params;
         $data = $this->atendimento  ->find($id);
         return view('admin.atendimento.atendimento',compact('params','data'));
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function responderAudio($id)
     {
+        // PARAMS DEFAULT
+        $this->params['subtitulo']='Atendimento / Preso';
+        $this->params['arvore'][0] = [
+                     'url' => 'admin/atendimento',
+                     'titulo' => 'Atendimentos'
+        ];
+        $this->params['tipo'] = 'audio';
+ 
+        $params = $this->params;
+        $data = $this->atendimento  ->find($id);
+        return view('admin.atendimento.atendimento',compact('params','data'));
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $dataForm  = $request->all();
+
+        if($this->atendimento->find($id)->update($dataForm)){
+            return redirect()->route($this->params['main_route'].'.index');
+        }else{
+            return redirect()->route($this->params['main_route'].'.create')->withErrors(['Falha ao editar.']);
+        }
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  
 }

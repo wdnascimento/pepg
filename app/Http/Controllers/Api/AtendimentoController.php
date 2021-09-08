@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Atendimento\AtendimentoRequest;
+use App\Http\Requests\Api\Atendimento\AtendimentoRespostaRequest;
 use App\Models\Atendimento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,19 @@ class AtendimentoController extends Controller
         
         if($this->atendimento->create($atendimento)){
             return response()->json(['response' => true, 'message' => 'Atendimento registrado com sucesso']);
+        }
+        return response()->json(['response' => false, 'message' => 'Erro gravar atendimento.']);
+    }
+
+    public function saveRespostaAtendimento(AtendimentoRespostaRequest $request){
+
+        $id = $request->only('atendimento_id');
+        $request = $request->except('atendimento_id');
+
+       
+    
+        if($this->atendimento->find($id["atendimento_id"])->update($request)){
+          return response()->json(['response' => true, 'message' => 'Atendimento registrado com sucesso']);
         }
         return response()->json(['response' => false, 'message' => 'Erro gravar atendimento.']);
     }

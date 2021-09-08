@@ -47,6 +47,7 @@
                                     <td>{{ $item->desc_lido }}<td>
                                         {{-- <a href="{{ route($params['main_route'].'.edit', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-edit"></span> Editar</a>  --}}
                                         <a href="{{ route($params['main_route'].'.responder', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-list"></span> Responder</a> 
+                                        <a href="{{ route($params['main_route'].'.responder-audio', $item->id) }}" class="btn btn-primary btn-xs"><span class="fas fa-microphone"></span> Responder Audio</a> 
                                     </td>
                                 </tr>
                                 @endforeach
