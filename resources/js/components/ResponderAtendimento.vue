@@ -13,7 +13,8 @@
 
     export default {
             props: {
-                id: Number
+                id: Number,
+                atendimento_id : Number
             },
             methods: {
                 sucessUpload(res){
@@ -24,14 +25,13 @@
                     
                     axios.post("https://10.37.15.160/api/atendimento/salvarrespostaatendimento",{
                             
-                            atendimento_id : 39,
+                            atendimento_id : this.atendimento_id,
                             lido : 1,
                             respondido : 1,
                             url_audio_resposta : url_audio,
 
                     })
                     .then(res=>{
-                        this.buscarSetores();
                         Vue.toasted.show("Atendimento salvo com sucesso!!", { 
                             theme: "toasted-primary", 
                             position: "top-right", 

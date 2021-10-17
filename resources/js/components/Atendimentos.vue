@@ -1,23 +1,34 @@
 <template>
     <div class="container">
-        <div v-for="atendimento in atendimentos" :key="atendimento.id" class="row">
+        <div v-for="atendimento in atendimentos" :key="atendimento.id" class="row pt-2">
             <div class="col-12">
-                <div class="card w-100">
+                <div class="card w-100 ">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-6 text-left"> <h3>Setor: {{ atendimento.titulo }}</h3> </div>
-                            <div class="col-6 text-right"> <h3>Data: {{ atendimento.data_atendimento }}</h3> </div>
+                            <div class="col-4 text-left"> <h3>Setor: {{ atendimento.titulo }}</h3> </div>
+                            
+                            <div class="col-4 text-center"> 
+                                <div v-if="atendimento.url_audio" class="col-12 pt-2 text-center">
+                                    <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio"/>
+                                </div>
+                            </div>
+                            
+                            <div class="col-4 text-right"> <h3>Data: {{ atendimento.data_atendimento }}</h3> </div>
                             
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body pt-2">
                         <div class="row">
-                            <div v-if="atendimento.url_audio" class="col-12 pt-2 text-center">
-                                <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio"/>
-                            </div>
+                            
                             <div v-if="atendimento.resposta_texto != ''" class="col-12 pt-2 text-justify">
                                 {{ atendimento.resposta_texto }}
+                            </div>
+                             <div v-else-if="atendimento.url_audio_resposta" class="col-12 pt-2 text-center">
+                                    <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio_resposta"/>
+                                </div>
+                            <div v-else >
+                                <h2 class="w-100 py-2">Aguarde resposta...</h2>
                             </div>
                         </div>
 
