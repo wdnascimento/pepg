@@ -155,7 +155,7 @@ class ArquivoSigepController extends Controller
                         $presos = $this->preso->select('id')->where('prontuario',$tmp_presos[$i]['prontuario'])->first();
 
                         if($presos){
-                            $this->preso->find($presos["id"])->update($tmp_presos[$i]);
+                           // $this->preso->find($presos["id"])->update($tmp_presos[$i]);
                             $tmp_presos[$i]['id'] = $presos["id"];
                         }else{
                             $result = $this->preso->create($tmp_presos[$i]);

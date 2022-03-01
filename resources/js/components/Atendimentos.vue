@@ -22,12 +22,12 @@
                         <div class="row">
                             
                             <div v-if="atendimento.resposta_texto != ''" class="col-12 pt-2 text-justify">
-                                {{ atendimento.resposta_texto }}
+                                <h2 class="w-100 py-2">{{ atendimento.resposta_texto }}</h2>
                             </div>
-                             <div v-else-if="atendimento.url_audio_resposta" class="col-12 pt-2 text-center">
+                            <div v-if="atendimento.url_audio_resposta != null" class="col-12 pt-2 text-center">
                                     <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio_resposta"/>
                                 </div>
-                            <div v-else >
+                            <div v-if="(atendimento.url_audio_resposta == null && atendimento.resposta_texto == '')" >
                                 <h2 class="w-100 py-2">Aguarde resposta...</h2>
                             </div>
                         </div>
@@ -48,21 +48,16 @@
         props: {
              preso: Object
         },
-
         data(){
             return {
                 atendimentos : [],
                 rootPath : 'https://10.37.15.160/storage/audio/atendimentos/',
             }
         },
-            
-            
-        
         mounted() {
             console.log('Component Atendimentos mounted.');
             this.buscarAtendimentos();
         },
-        
         methods: {
             buscarAtendimentos(){
 
