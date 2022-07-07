@@ -66,8 +66,9 @@
     </head>
 
     <body>
+
         <div id="app">
-            <tela-inicial></tela-inicial>
+            <tela-inicial url="{{ url('') }}"></tela-inicial>
         
             
         </div>

@@ -47,16 +47,16 @@
 
                         <div id="app" class="row">
                             <div class="d-flex w-100 p-2 justify-content-center">
-                                <audio-player class="d-flex" src="https://10.37.15.160/storage/audio/atendimentos/{{$data["url_audio"]}}"/></audio-player>
+                                <audio-player class="d-flex" src="{{ asset('storage/audio/atendimentos/'.$data["url_audio"]) }}"/></audio-player>
                             </div>
                             <div class="d-flex w-100 p-2 justify-content-center">
-                                <responder-atendimento atendimento_id="{{$data["id"]}}"></responder-atendimento>
+                                <responder-atendimento atendimento_id="{{ $data["id"]}}" url="{{ asset('') }}"></responder-atendimento>
                             </div>
                         </div>
                     @else
                         <div id="app" class="row">
                             <div class="d-flex w-100 p-2 justify-content-center">
-                                <audio-player class="d-flex" src="https://10.37.15.160/storage/audio/atendimentos/{{$data["url_audio"]}}"/></audio-player>
+                                <audio-player class="d-flex" src="{{ asset('storage/audio/atendimentos/'.$data["url_audio"]) }}"/></audio-player>
                             </div>
                             
                             {{--

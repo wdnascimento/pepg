@@ -10,7 +10,7 @@
             </div>
             <div v-if="atendimento.show" class="col-12 p-2 d-flex justify-content-center">
                 <audio-recorder class="d-flex"
-                        upload-url="https://10.37.15.160/api/preso/audio"
+                        :upload-url="this.url+'/api/preso/audio'"
                         :attempts="1"
                         :time=".5"
                         :successful-upload="sucessUpload"
@@ -26,7 +26,8 @@
 
     export default {
         props: {
-             preso: Object
+             preso: Object,
+             url : String
         },
         data(){
             return {
@@ -47,7 +48,7 @@
             buscarSetores(){
                 this.limparSetores();
 
-                axios.get("https://10.37.15.160/api/setor/listar/"+this.preso_id)
+                axios.get(this.url+"/api/setor/listar/"+this.preso_id)
                 .then(res => {
                     if(res.data.response == false){
                          Vue.toasted.show(res.data.message, { 
@@ -116,7 +117,7 @@
 
             salvarAtendimento(url_audio){
                 
-                axios.post("https://10.37.15.160/api/atendimento/salvaratendimento",{
+                axios.post(this.url+"/api/atendimento/salvaratendimento",{
                     
                         preso_id : this.preso.id,
                         setor_id : this.atendimento.setor_id ,

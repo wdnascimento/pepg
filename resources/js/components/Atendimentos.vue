@@ -9,7 +9,7 @@
                             
                             <div class="col-4 text-center"> 
                                 <div v-if="atendimento.url_audio" class="col-12 pt-2 text-center">
-                                    <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio"/>
+                                    <audio-player class="d-flex" v-bind:src="url+'/storage/audio/atendimentos/'+atendimento.url_audio"/>
                                 </div>
                             </div>
                             
@@ -25,7 +25,7 @@
                                 <h2 class="w-100 py-2">{{ atendimento.resposta_texto }}</h2>
                             </div>
                             <div v-if="atendimento.url_audio_resposta != null" class="col-12 pt-2 text-center">
-                                    <audio-player class="d-flex" :src="'https://10.37.15.160/storage/audio/atendimentos/'+atendimento.url_audio_resposta"/>
+                                    <audio-player class="d-flex" v-bind:src="url+'/storage/audio/atendimentos/'+atendimento.url_audio_resposta"/>
                                 </div>
                             <div v-if="(atendimento.url_audio_resposta == null && atendimento.resposta_texto == '')" >
                                 <h2 class="w-100 py-2">Aguarde resposta...</h2>
@@ -46,22 +46,21 @@
     
     export default {
         props: {
-             preso: Object
+             preso: Object,
+             url : String
         },
         data(){
             return {
                 atendimentos : [],
-                rootPath : 'https://10.37.15.160/storage/audio/atendimentos/',
+                rootPath : this.url+'/storage/audio/atendimentos/',
             }
         },
         mounted() {
-            console.log('Component Atendimentos mounted.');
             this.buscarAtendimentos();
         },
         methods: {
             buscarAtendimentos(){
-
-                axios.get("https://10.37.15.160/api/atendimento/preso/"+this.preso.id)
+                axios.get(this.url+"/api/atendimento/preso/"+this.preso.id)
                 .then(res => {
                     if(res.data.response == false){
                          Vue.toasted.show(res.data.message, { 

@@ -1,14 +1,9 @@
-# CONFIGURAR UTILIZAÇÃO DO HTTPS
-RewriteEngine On
+# # CONFIGURAR UTILIZAÇÃO DO HTTPS
+# RewriteEngine On
 
-RewriteCond %{HTTP_HOST} ^10.37.15.160\/atendimento [NC]
-RewriteCond %{HTTPS} On
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-
-
-#RewriteCond %{SERVER_PORT} 80
-#RewriteRule ^(.*)$ http://10.37.15.160/$1 [R,L]
-
+# RewriteCond %{HTTP_HOST} ^10.37.15.250 [NC]
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>

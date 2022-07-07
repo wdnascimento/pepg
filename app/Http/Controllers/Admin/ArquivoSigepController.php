@@ -12,6 +12,7 @@ use App\Models\Preso;
 use App\Models\PresoAlojamento;
 use Carbon\Carbon;
 use Auth;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -93,6 +94,7 @@ class ArquivoSigepController extends Controller
         
     }
 
+
     public function import($id)
     {
         $this->params['subtitulo']='Importar Arquivo Sigep';
@@ -105,22 +107,37 @@ class ArquivoSigepController extends Controller
                'url' => '',
                'titulo' => 'Cadastrar'
            ]];
-        $params = $this->params;
-        $data = $this->arquivo_sigep->find($id);
-            // galerias 
-        $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
-
-        // LIMPA ALOJAMENTOS 
-        $desaloja =  $this->preso_alojamento->where('data_saida',NULL)->delete();
         
-        if($desaloja !== NULL){
-            if( $data->importado == 0){
+        $data = $this->arquivo_sigep->find($id);
+        if( $data->importado == 0){
+            // galerias 
+            $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
+            
+            // LIMPA ALOJAMENTOS 
+            $desaloja =  $this->preso_alojamento->where('data_saida',NULL)->delete();
+        
+            if($desaloja !== NULL){
                 $url = Storage::url($data->titulo);
-                $csv = array_map('str_getcsv', file($url));
-                array_shift($csv);
+               
+                $streamSSL = stream_context_create(array(
+                    "ssl"=>array(
+                        "verify_peer"=> false,
+                        "verify_peer_name"=> false
+                    )
+                ));
+
+                $csv = [];
+
+                $file_handle = fopen($url, 'r',false,$streamSSL);
+                while (!feof($file_handle)) {
+                    $csv[] = fgetcsv($file_handle, 0,',');
+                }
+                fclose($file_handle);
+              
                 $tmp_presos = [];
                 $alojamento_preso=[];
                 $presos = $this->preso->all();
+                array_shift($csv);
                 foreach ($csv as $i => $v){
                     $nome_prontuario = preg_split("/[\-]/", $v[0]);
                     $prontuarios[]= trim($nome_prontuario[0]);
@@ -184,13 +201,13 @@ class ArquivoSigepController extends Controller
                     return redirect()->back()->withErrors(['Erro ao criar novo alojamento']);
                 }
             }else{
-                return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
-                
+                return redirect()->back()->withErrors(['Erro ao importar, Desalojar os presos já importado anteriormente.']);
             }
+            
         }else{
-            return redirect()->back()->withErrors(['Erro ao importar, Desalojar os presos já importado anteriormente.']);
+            return redirect()->back()->withErrors(['Erro ao importar, Arquivo já importado anteriormente.']);
+            
         }
-
         if(!$data->update(['importado' => 1])){
             return redirect()->back()->withErrors(['Erro modificar status da importação.']);
         }

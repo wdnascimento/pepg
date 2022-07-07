@@ -1,6 +1,5 @@
 <template>
     <div id="app" class="container">
-        
         <div class="row text-center py-2">
             <h1 class="w-100">Marcar Atendimentos</h1>    
         </div>
@@ -47,32 +46,30 @@
                 <b-alert  show variant="primary" class="text-center">Nenhum preso selecionado.</b-alert>
             </div>   
             <div v-if="preso.show" class="col-6 pt-3">
-                <router-link to="/marcaratendimento" class="btn btn-success w-100 p-3 h2" >Marcar Atendimentos</router-link>
+                <router-link to="/marcaratendimento"  class="btn btn-success w-100 p-3 h2" v-bind:url="this.url" >Marcar Atendimentos</router-link>
             </div>
             <div v-if="preso.show" class="col-6 pt-3">
-                <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 h2" >Resposta de Atendimentos</router-link>
+                <router-link to="/buscaratendimentos"  class="btn btn-primary w-100 p-3 h2" v-bind:url="this.url" >Resposta de Atendimentos</router-link>
             </div>
         </div>
-        <router-view v-if="preso.show" :preso="this.preso"></router-view>
-        
+        <router-view v-if="preso.show" :preso="this.preso" v-bind:url="this.url"></router-view>
         <div class="row" >  
             <div  class="col-12">
                  <b-button  variant="danger" @click="limparCampos" class="w-100 p-3 h2">SAIR</b-button>
             </div>   
         </div>
-
-        
-        
     </div>
 </template>
 <style>
     .setor:active{
-            background-color: #000;
-        
+        background-color: #000;
     }
 </style>
 <script>
     export default {
+        props: {
+            url : String
+        },
         
         data() {
             return {
@@ -81,7 +78,6 @@
                 },
                 form: {
                     prontuario: '',
-                    
                 },
                 preso: {
                     id : null,
@@ -95,7 +91,8 @@
             }
         },
         created(){
-            axios.get("https://10.37.15.160/api/parametro/limite_atendimento")
+            
+            axios.get(this.url+"/api/parametro/limite_atendimento")
             .then(res => {
                 if(res.data){
                     this.limite_atendimento = res.data.valor;
@@ -117,23 +114,23 @@
             })                    
         },
         methods: {
-
             // -----------------------------------
             // EVENTOS
             // -----------------------------------
             
             marcarAtendimentos(){
-                    this.$router.push({
-                        path: '/marcaratendimento'
-                    });
-                
+                this.$router.push({
+                    path: '/marcaratendimento'
+                });
             },
 
             buscarAtendimentos(){
-                    this.$router.push({
-                        path: '/buscaratendimentos'
-                    });
-                
+                this.$router.push({
+                    path: '/buscaratendimentos:url',
+                    params : {
+                        'url' : 'este'
+                    }
+                });
             },
 
             limparCampos(){
@@ -144,7 +141,6 @@
                 this.preso.nome= '';
                 this.preso.foto= '';
                 this.preso.show = false; 
-                
             },
 
             initRoute() {
@@ -158,23 +154,15 @@
                 this.preso.show= false;
             },
             
-            
-
-            
             // -----------------------------------
             // ACESSO API
             // -----------------------------------
            
-
-            
-
-            
             onSubmit(event) {
                 this.initRoute();
                 event.preventDefault();
-                axios.get("https://10.37.15.160/api/preso/"+this.form.prontuario)
+                axios.get(this.url+"/api/preso/"+this.form.prontuario)
                 .then(res => {
-                   
                     if(res.data.length){
                         this.preso.id= res.data[0].id;
                         this.preso.kit= res.data[0].kit;
@@ -190,7 +178,6 @@
                         });
                         this.limparCampos();                       
                    }
-                  
                 })
                 .catch(function(err){
                     this.$toasted.show("Erro!!"+err, { 
@@ -199,10 +186,7 @@
                         duration : 2000
                     });
                 })
-
             }
-            
         }
-       
     }
 </script>
