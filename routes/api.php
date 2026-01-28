@@ -33,7 +33,6 @@ Route::group(['namespace' => 'Api'],function(){
 // PUT     /companies/123  // Update a company with ID 123
 
 Route::group(['namespace' => 'Api' ],function(){
-
     Route::get('preso/{prontuario}', 'PresoController@index')->name('api.preso.index');
     Route::get('presoalojamento/{preso_id}', 'PresoController@presoalojamento')->name('api.preso.alojamento');
     Route::get('presokit/{kit}', 'PresoController@kit')->name('api.presokit.index');

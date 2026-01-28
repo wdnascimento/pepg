@@ -1,76 +1,95 @@
 <template>
-    <div id="app" class="container">
-        <div class="row text-center py-2">
-            <h1 class="w-100">Marcar Atendimentos</h1>    
+    <div class="container mt-4">
+        <div class="row text-center py-3">
+            <h1 class="w-100 text-primary">Marcar Atendimentos</h1>
         </div>
         <div class="row">
             <div class="col-12">
-                <b-card class="h-100" >
-                    <b-form @submit="onSubmit" @reset="onReset" >
-                        <b-form-group
-                            id="input-group-1"
-                            label="Digite o PRONTUÁRIO ou KIT:"
-                            label-for="input-1"
-                            description=""
-                            label-class="text-center"
-                            >
-                            <b-form-input
-                                id="input-1"
-                                name="input-1"
-                                v-model="form.prontuario"
-                                class="text-center h1"
-                                style="font-size: 2em"
-                                placeholder="PRONT. OU KIT"
-                                >
-                            </b-form-input>
-                        </b-form-group>
-                    </b-form>
-                </b-card>
+                <div class="card">
+                    <div class="card-body">
+                        <form @submit="onSubmit" @reset="onReset">
+                            <div class="mb-3">
+                                <label for="input-1" class="form-label text-center d-block">Digite o PRONTUÁRIO ou KIT:</label>
+                                <input
+                                    id="input-1"
+                                    name="input-1"
+                                    v-model="form.prontuario"
+                                    class="form-control form-control-lg text-center"
+                                    style="font-size: 2em"
+                                    placeholder="PRONT. OU KIT"
+                                    type="text"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="col-12">
-                <b-card v-if="preso.show">
-                    <div class="row px-2">
-                        <div class="col-4 center">
-                            <b-avatar v-bind:src="preso.foto" class="justify-content-center" size="6rem"></b-avatar>
-                        </div>
-                        <div class="col-8">
-                            <p class="h2"  >Prontuário: <strong>{{ preso.prontuario }}</strong> </p>
-                            <p class="h2" >Nome: {{ preso.nome }}</p>
+            <div class="col-12 mt-3">
+                <div v-if="preso.show" class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <img v-if="preso.foto" :src="preso.foto" alt="Foto do preso" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                <div v-else class="bg-secondary rounded-circle d-inline-block" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                                    <span class="text-white">Sem foto</span>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <p class="h4 mb-2">Prontuário: <strong>{{ preso.prontuario }}</strong></p>
+                                <p class="h4">Nome: {{ preso.nome }}</p>
+                            </div>
                         </div>
                     </div>
-                </b-card>
+                </div>
             </div>
         </div>
-        <div class="row">  
-            <div v-if="(!preso.show)" class="col-12">
-                <b-alert  show variant="primary" class="text-center">Nenhum preso selecionado.</b-alert>
-            </div>   
-            <div v-if="preso.show" class="col-6 pt-3">
-                <router-link to="/marcaratendimento"  class="btn btn-success w-100 p-3 h2" v-bind:url="this.url" >Marcar Atendimentos</router-link>
+        <div class="row mt-3">
+            <div v-if="!preso.show" class="col-12">
+                <div class="alert alert-primary text-center" role="alert">Nenhum preso selecionado.</div>
             </div>
-            <div v-if="preso.show" class="col-6 pt-3">
-                <router-link to="/buscaratendimentos"  class="btn btn-primary w-100 p-3 h2" v-bind:url="this.url" >Resposta de Atendimentos</router-link>
+            <div v-if="preso.show" class="col-md-6 mb-2">
+                <router-link to="/marcaratendimento" class="btn btn-success w-100 p-3 h5" :url="url">Marcar Atendimentos</router-link>
+            </div>
+            <div v-if="preso.show" class="col-md-6 mb-2">
+                <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 h5" :url="url">Resposta de Atendimentos</router-link>
             </div>
         </div>
-        <router-view v-if="preso.show" :preso="this.preso" v-bind:url="this.url"></router-view>
-        <div class="row" >  
-            <div  class="col-12">
-                 <b-button  variant="danger" @click="limparCampos" class="w-100 p-3 h2">SAIR</b-button>
-            </div>   
+        <router-view v-if="preso.show" :preso="preso" :url="url"></router-view>
+        <div class="row mt-3">
+            <div class="col-12">
+                <button type="button" class="btn btn-danger w-100 p-3 h5" @click="limparCampos">SAIR</button>
+            </div>
         </div>
     </div>
 </template>
-<style>
-    .setor:active{
+
+<style scoped>
+    .setor:active {
         background-color: #000;
     }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
 </style>
+
 <script>
     export default {
         props: {
             url : String
         },
-        
+
         data() {
             return {
                 param : {
@@ -90,34 +109,32 @@
                 active : ''
             }
         },
-        created(){
-            
-            axios.get(this.url+"/api/parametro/limite_atendimento")
-            .then(res => {
-                if(res.data){
-                    this.limite_atendimento = res.data.valor;
-                }else{
-                        this.$toasted.show("Parametro não encontrado.", { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
-                }
-                
-            })
-            .catch(function(err){
-                this.$toasted.show("Erro ao Carregar Parametros!!", { 
-                    theme: "toasted-primary", 
-                    position: "top-right", 
-                    duration : 2000
-                });
-            })                    
+        mounted(){
+            this.carregarParametros();
         },
         methods: {
+            carregarParametros(){
+                axios.get(this.url+"/api/parametro/limite_atendimento")
+                .then(res => {
+                    if(res.data){
+                        this.limite_atendimento = res.data.valor;
+                    }else{
+                        if(this.$toast){
+                            this.$toast.info("Parametro não encontrado.");
+                        }
+                    }
+                })
+                .catch((err) => {
+                    alert('erro'+err);
+                    if(this.$toast){
+                        this.$toast.error("Erro ao Carregar Parametros!!");
+                    }
+                })
+            },
             // -----------------------------------
             // EVENTOS
             // -----------------------------------
-            
+
             marcarAtendimentos(){
                 this.$router.push({
                     path: '/marcaratendimento'
@@ -140,7 +157,7 @@
                 this.preso.kit= null;
                 this.preso.nome= '';
                 this.preso.foto= '';
-                this.preso.show = false; 
+                this.preso.show = false;
             },
 
             initRoute() {
@@ -153,38 +170,48 @@
                 this.form.prontuario = '';
                 this.preso.show= false;
             },
-            
+
             // -----------------------------------
             // ACESSO API
             // -----------------------------------
-           
+
             onSubmit(event) {
-                this.initRoute();
                 event.preventDefault();
+                if(this.$toast){
+                    this.$toast.warning('Pesquisando prontuário...');
+                }
                 axios.get(this.url+"/api/preso/"+this.form.prontuario)
                 .then(res => {
-                    if(res.data.length){
-                        this.preso.id= res.data[0].id;
-                        this.preso.kit= res.data[0].kit;
-                        this.preso.prontuario= res.data[0].prontuario;
-                        this.preso.nome= res.data[0].nome;
-                        this.preso.foto= 'http://www.spr.depen.pr.gov.br/centralvagas/exibirFoto.jpg?numProntuario='+res.data[0].prontuario+'&idImagem=1';
-                        this.preso.show = true; 
+
+                    let preso = null;
+                    // Verificar se é array ou objeto
+                    if(Array.isArray(res.data) && res.data.length > 0){
+                        preso = res.data[0];
+                    } else if(res.data && typeof res.data === 'object' && res.data.id){
+                        preso = res.data;
+                    }
+
+                    if(preso){
+                        this.preso.id= preso.id;
+                        this.preso.kit= preso.kit;
+                        this.preso.prontuario= preso.prontuario;
+                        this.preso.nome= preso.nome;
+                        this.preso.foto= '';
+                        this.preso.show = true;
+                        if(this.$toast){
+                            this.$toast.success("Prontuário ou KIT VÁLIDO.");
+                        }
                     }else{
-                         this.$toasted.show("Prontuário ou KIT INVÁLIDO.", { 
-                            theme: "toasted-primary", 
-                            position: "top-right", 
-                            duration : 2000
-                        });
-                        this.limparCampos();                       
+                        if(this.$toast){
+                            this.$toast.warning("Prontuário ou KIT INVÁLIDO.");
+                        }
+                        this.limparCampos();
                    }
                 })
-                .catch(function(err){
-                    this.$toasted.show("Erro!!"+err, { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
+                .catch((err) => {
+                    if(this.$toast){
+                        this.$toast.error("Erro!!" + err);
+                    }
                 })
             }
         }

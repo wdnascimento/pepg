@@ -24,20 +24,49 @@ class PresoController extends Controller
     public function uploadFile(Request $request)
     {
         $request->validate([
-            'audio' => 'required|mimes:mp3|max:2048'
+            'audio' => 'required|file|mimes:webm,ogg|max:2048'  // 2 MB para 30s de áudio
         ]);
 
         if ($request->file()) {
-            $name = time() . '_' . $request->audio->getClientOriginalName();
-            $filePath = $request->file('audio')->storeAs('audio/atendimentos', $name, 'public');
-            if (!$filePath) {
-                return response()->json(['response' => false, 'message' => 'Erro ao carregar o arquivo.']);
+            $file = $request->file('audio');
+            $originalExtension = $file->getClientOriginalExtension();
+
+            // Nome do arquivo MP3 final
+            $mp3Name = time() . '_audio.mp3';
+            $tempPath = $file->storeAs('audio/temp', time() . '_temp.' . $originalExtension, 'public');
+
+            // Se não for MP3, converter usando FFmpeg
+            if ($originalExtension !== 'mp3') {
+                $inputPath = storage_path('app/public/' . $tempPath);
+                $outputPath = storage_path('app/public/audio/atendimentos/' . $mp3Name);
+
+                // Criar diretório se não existir
+                if (!file_exists(dirname($outputPath))) {
+                    mkdir(dirname($outputPath), 0755, true);
+                }
+
+                // Converter para MP3 usando FFmpeg
+                $command = "ffmpeg -i {$inputPath} -vn -ar 44100 -ac 2 -b:a 128k {$outputPath} 2>&1";
+                exec($command, $output, $returnCode);
+
+                // Remover arquivo temporário
+                @unlink($inputPath);
+
+                if ($returnCode !== 0) {
+                    return response()->json([
+                        'response' => false,
+                        'message' => 'Erro ao converter áudio para MP3.'
+                    ], 500);
+                }
+            } else {
+                // Se já for MP3, apenas mover
+                $file->storeAs('audio/atendimentos', $mp3Name, 'public');
+                @unlink(storage_path('app/public/' . $tempPath));
             }
 
-
-
-            return response()->json(['response' => true, 'data' => $name]);
+            return response()->json(['response' => true, 'data' => $mp3Name]);
         }
+
         return response()->json(['response' => false, 'message' => 'Arquivo não informado.']);
     }
 
@@ -64,7 +93,7 @@ class PresoController extends Controller
             ->join('galerias', 'galerias.id', 'cubiculos.galeria_id')
             ->where('preso_alojamentos.data_saida', NULL)
             ->where('presos.id', $preso_id)
-            ->first();   
-            
+            ->first();
+
     }
 }

@@ -4,21 +4,25 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Atendimento - PEPG</title>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-        
-        <!-- Styles -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Inline Styles for initial load -->
         <style>
-            html, body {
-                background-color: #fff;
+            body {
+                background-color: #f8f9fa;
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
-                height: 100vh;
                 margin: 0;
+                padding: 0;
+            }
+
+            html, body {
+                height: 100vh;
             }
 
             .full-height {
@@ -43,10 +47,19 @@
 
             .content {
                 text-align: center;
+                padding: 2rem;
             }
 
             .title {
                 font-size: 84px;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .subtitle {
+                font-size: 24px;
+                margin: 1rem 0;
+                color: #666;
             }
 
             .links > a {
@@ -62,19 +75,17 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            #app {
+                width: 100%;
+                height: 100%;
+            }
         </style>
     </head>
 
     <body>
-
         <div id="app">
             <tela-inicial url="{{ url('') }}"></tela-inicial>
-        
-            
         </div>
-      
-       
-
-    <script src="{{ asset('js/app.js') }}"></script>
-    
+    </body>
 </html>

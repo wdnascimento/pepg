@@ -1,36 +1,53 @@
-require('./bootstrap');
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import VueResource from 'vue-resource';
-import router from './js/Router'
+import './bootstrap';
+import { createApp } from 'vue';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import router from './js/Router';
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-   
+// Importar componentes
+import TelaInicial from './components/TelaInicial.vue';
+import Atendimentos from './components/Atendimentos.vue';
+import MarcarAtendimento from './components/MarcarAtendimento.vue';
+import ResponderAtendimento from './components/ResponderAtendimento.vue';
+import AudioRecorder from './components/AudioRecorder.vue';
+import AudioPlayer from './components/AudioPlayer.vue';
+import TextResponse from './components/TextResponse.vue';
 
-window.Vue = require('vue');
-
-
-Vue.component('tela-inicial', require('./components/TelaInicial.vue').default);
-Vue.component('atendimentos', require('./components/Atendimentos.vue').default);
-Vue.component('marcar-atendimento', require('./components/MarcarAtendimento.vue').default);
-Vue.component('responder-atendimento', require('./components/ResponderAtendimento.vue').default);
-
-Vue.use(BootstrapVue);
-Vue.use(VueResource);
-
-
- /* Audio Record Plugin */
- import AudioRecorder from 'vue-audio-recorder';
- import Toasted from 'vue-toasted';
- /* Audio Record Plugin */
- Vue.use(AudioRecorder);
- Vue.use(Toasted);
-
-
-
-
-const app = new Vue({
-    toasted : Toasted,
-    router,
-    el: '#app',
+// Criar a aplicação Vue 3
+const app = createApp({
+    template: '<tela-inicial :url="url"></tela-inicial>',
+    data() {
+        return {
+            url: window.location.origin
+        }
+    }
 });
+
+// Registrar componentes globalmente
+app.component('tela-inicial', TelaInicial);
+app.component('atendimentos', Atendimentos);
+app.component('marcar-atendimento', MarcarAtendimento);
+app.component('responder-atendimento', ResponderAtendimento);
+app.component('audio-recorder', AudioRecorder);
+app.component('audio-player', AudioPlayer);
+app.component('text-response', TextResponse);
+
+// Usar plugins
+app.use(router);
+app.use(Toast, {
+    position: 'top-right',
+    timeout: 5000,
+    closeButton: true,
+    pauseOnHover: true,
+    draggable: true,
+    draggablePercent: 0.6,
+    showCloseButtonOnHover: false,
+    hideProgressBar: false,
+    transition: "Vue-Toastification__slideBlurred",
+    maxToasts: 5,
+    newestOnTop: true
+});
+
+// Montar a aplicação
+app.mount('#app');

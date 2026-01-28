@@ -1,7 +1,7 @@
 <template>
     <div v-if="setores.length" class="row">
             <div  v-for="setor in setores" :key="setor.id" class="col-3 pt-3 w-100">
-                <b-button  variant="warning" @click="selecionaSetor(setor.id,setor.titulo)"  class="setor w-100 p-3 h2"> {{setor.titulo}} </b-button>
+                <button type="button" class="btn btn-warning setor w-100 p-3 h2" @click="selecionaSetor(setor.id,setor.titulo)">{{setor.titulo}}</button>
             </div>
             <div v-if="atendimento.show" class="col-12 p-2">
                 <h2  v-if="(atendimento.setor_id != null)" class="w-100 text-center" >
@@ -18,7 +18,7 @@
             </div>
         </div>
     <div v-else class="col-12">
-        <b-alert  show variant="primary" class="text-center">Nenhum Setor Habilitado.</b-alert>
+        <div class="alert alert-primary text-center" role="alert">Nenhum Setor Habilitado.</div>
     </div>
 </template>
 
@@ -43,7 +43,7 @@
         created(){
             this.buscarSetores();
         },
-        
+
         methods: {
             buscarSetores(){
                 this.limparSetores();
@@ -51,36 +51,30 @@
                 axios.get(this.url+"/api/setor/listar/"+this.preso_id)
                 .then(res => {
                     if(res.data.response == false){
-                         Vue.toasted.show(res.data.message, { 
-                                theme: "toasted-primary", 
-                                position: "top-right", 
-                                duration : 2000
-                            });
-                            this.limparSetores();
+                        if(this.$toast){
+                            this.$toast.info(res.data.message);
+                        }
+                        this.limparSetores();
 
                     }else{
                         if(res.data.length){
                             this.setores = res.data;
                         }else{
-                            Vue.toasted.show("Nenhum setor habilitado para atendimento.", { 
-                                theme: "toasted-primary", 
-                                position: "top-right", 
-                                duration : 2000
-                            });
-                            
+                            if(this.$toast){
+                                this.$toast.info("Nenhum setor habilitado para atendimento.");
+                            }
+
                             this.limparSetores();
-                        
+
                         }
                     }
                 })
-                .catch(function(err){
-                    Vue.toasted.show("Erro!!"+err, { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
-                })            
-            }, 
+                .catch((err) => {
+                    if(this.$toast){
+                        this.$toast.error("Erro!!" + err);
+                    }
+                })
+            },
 
             selecionaSetor(id,titulo){
                 this.atendimento.setor_id = id;
@@ -96,11 +90,9 @@
             },
 
             faliedUpload(){
-                Vue.toasted.show("Erro ao Carregar Audio!!", { 
-                    theme: "toasted-primary", 
-                    position: "top-right", 
-                    duration : 2000
-                });
+                if(this.$toast){
+                    this.$toast.error("Erro ao Carregar Audio!!");
+                }
             },
 
             sucessUpload(res){
@@ -108,17 +100,15 @@
             },
 
             wait(){
-                 Vue.toasted.show("Aguarde....", { 
-                    theme: "toasted-primary", 
-                    position: "top-right", 
-                    duration : 2000
-                });
+                if(this.$toast){
+                    this.$toast.info("Aguarde....");
+                }
             },
 
             salvarAtendimento(url_audio){
-                
+
                 axios.post(this.url+"/api/atendimento/salvaratendimento",{
-                    
+
                         preso_id : this.preso.id,
                         setor_id : this.atendimento.setor_id ,
                         url_audio : url_audio,
@@ -126,20 +116,16 @@
                 })
                 .then(res=>{
                     this.buscarSetores();
-                    Vue.toasted.show("Atendimento salvo com sucesso!!", { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
+                    if(this.$toast){
+                        this.$toast.success("Atendimento salvo com sucesso!!");
+                    }
                 }
 
                 )
-               .catch(function(err){
-                    Vue.toasted.show("Erro!!"+err, { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
-                        duration : 2000
-                    });
+               .catch((err) => {
+                    if(this.$toast){
+                        this.$toast.error("Erro!!" + err);
+                    }
                 })
             },
 

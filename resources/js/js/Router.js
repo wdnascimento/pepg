@@ -1,26 +1,25 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import MarcarAtendimento from '../components/MarcarAtendimento'
-import Atendimentos from '../components/Atendimentos'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import MarcarAtendimento from '../components/MarcarAtendimento.vue'
+import Atendimentos from '../components/Atendimentos.vue'
 
-Vue.use(Router)
+const routes = [
+    {
+        path: '/',
+        redirect: '/marcaratendimento'
+    },
+    {
+        path: '/marcaratendimento',
+        component: MarcarAtendimento
+    },
+    {
+        path: '/buscaratendimentos',
+        component: Atendimentos
+    }
+];
 
-export default new Router({
-    mode : 'hash',
-    routes: [
-        {
-            path :'/',
-        },
-        {
-            path :'/marcaratendimento',
-            component : MarcarAtendimento
-        },
-        {
-            path: '/buscaratendimentos',
-            component : Atendimentos
-        }
-        
-
-
-    ]    
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
 });
+
+export default router;
