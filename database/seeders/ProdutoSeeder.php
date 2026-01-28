@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +22,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'180',
             'observacao'=>'Modelo Havaianas',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Desodorante Roll On 50Ml',
@@ -30,7 +32,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Roll On 50Ml',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Desinfetante 500ml',
@@ -40,7 +42,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Desinfetante 500ml',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Creme Dental',
@@ -50,7 +52,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Creme Dental Close Up 100g',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Cueca Preta',
@@ -60,7 +62,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'90',
             'observacao'=>'Cueca preta *Apenas 2 unidades*',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
 
         //Produtos de consumo diário do Preso
@@ -72,7 +74,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Pão Fatiado *Apenas 2 unidades*',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Achocolatado - 800gr',
@@ -82,7 +84,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Achocolatado - 800gr',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Leite em Pó - 800gr',
@@ -92,7 +94,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Leite em Pó - 800gr',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Farofa - 500gr',
@@ -102,7 +104,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Farofa - 500gr',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Doce de Leite - Sem mistura',
@@ -112,7 +114,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Doce de Leite - Sem mistura',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Barras de Chocolate ao Leite - MÁX. 450gr',
@@ -122,7 +124,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Barras de Chocolate ao Leite - MÁX. 450gr',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Bolacha Isabel - Doce',
@@ -132,7 +134,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Bolacha Isabel - Doce',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Bolacha Isabel - Salgada',
@@ -142,7 +144,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Bolacha Isabel - Salgada',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Açucar - 1kg',
@@ -152,7 +154,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Açucar - 1kg',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
         DB::table('produtos')->insert([
             'descricao'=>'Suco em Pó',
@@ -162,7 +164,7 @@ class ProdutoSeeder extends Seeder
             'periodicidade'=>'30',
             'observacao'=>'Suco em Pó ou 250gr em uma unidade',
             'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>NULL,            
+            'updated_at'=>NULL,
         ]);
     }
 }

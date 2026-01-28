@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +23,7 @@ class CubiculoSeeder extends Seeder
                     'galeria_id' => $galeria->id
                 ]);
             }
-            
+
         }
 
         $galerias = DB::table('galerias')->select('id')->where('tipo',1)->get();
@@ -33,8 +35,8 @@ class CubiculoSeeder extends Seeder
                     'galeria_id' => $galeria->id
                 ]);
             }
-            
+
         }
-        
+
     }
 }

@@ -14,7 +14,7 @@ class AlterPresoAlojamentos extends Migration
     public function up()
     {
         Schema::table('preso_alojamentos', function (Blueprint $table) {
-            $table->addColumn('text', 'motivo')->after('data_saida');
+            $table->text('motivo')->nullable()->after('data_saida');
         });
     }
 
@@ -25,8 +25,8 @@ class AlterPresoAlojamentos extends Migration
      */
     public function down()
     {
-        Schema::alter('preso_alojamentos', function (Blueprint $table) {
-            $table->dropColumn('text');
+        Schema::table('preso_alojamentos', function (Blueprint $table) {
+            $table->dropColumn('motivo');
         });
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -236,7 +238,7 @@ class TableCodesSeeder extends Seeder
             'valor' => 2,
             'descricao' => 'ALIMENTOS PPL',
         ]);
-        
+
         DB::table('table_codes')->insert([
             'pai' => '6',
             'item' => '3',
@@ -327,7 +329,7 @@ class TableCodesSeeder extends Seeder
             'valor' => 1,
             'descricao' => 'RECEPCIONADO PORTARIA',
         ]);
-        
+
         DB::table('table_codes')->insert([
             'pai' => '9',
             'item' => '2',
@@ -341,6 +343,6 @@ class TableCodesSeeder extends Seeder
             'valor' => 3,
             'descricao' => 'ENTREGUE P/ PRESO',
         ]);
-        
+
     }
 }

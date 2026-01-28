@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
+
 {
     /**
      * Seed the application's database.
@@ -17,6 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CubiculoSeeder::class);
         $this->call(TableCodesSeeder::class);
         $this->call(ProdutoSeeder::class);
-    
+        $this->call(ParametroSeeder::class);
+        $this->call(SetorSeeder::class);
+
     }
 }

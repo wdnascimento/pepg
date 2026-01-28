@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -35,37 +37,37 @@ class GaleriaSeeder extends Seeder
             'unidade_id' => 1,
             'tipo' => 0
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '05-GALERIA',
             'unidade_id' => 1,
             'tipo' => 1
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '06-GALERIA',
             'unidade_id' => 1,
             'tipo' => 1
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '07-GALERIA',
             'unidade_id' => 1,
             'tipo' => 1
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '08-GALERIA',
             'unidade_id' => 1,
             'tipo' => 1
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '09-GALERIA',
             'unidade_id' => 1,
             'tipo' => 1
         ]);
-        
+
         DB::table('galerias')->insert([
             'titulo' => '10-GALERIA',
             'unidade_id' => 1,
