@@ -20,5 +20,11 @@ class ParametroSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('parametros')->insert([
+            'titulo' => 'tempo_limite_atendimento',
+            'valor' => '30',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
