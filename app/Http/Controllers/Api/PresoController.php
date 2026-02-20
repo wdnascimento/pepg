@@ -9,6 +9,7 @@ use App\Models\Atendimento;
 use App\Models\PresoAlojamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Util\Json;
 
 class PresoController extends Controller
@@ -30,14 +31,16 @@ class PresoController extends Controller
         if ($request->file()) {
             $file = $request->file('audio');
             $originalExtension = $file->getClientOriginalExtension();
+            $timestamp = time();
 
-            // Nome do arquivo MP3 final
-            $mp3Name = time() . '_audio.mp3';
-            $tempPath = $file->storeAs('audio/temp', time() . '_temp.' . $originalExtension, 'public');
+            // Nome final padrão: mantém extensão original (fallback)
+            $finalName = $timestamp . '_audio.' . $originalExtension;
+            $tempPath = $file->storeAs('audio/temp', $timestamp . '_temp.' . $originalExtension, 'public');
 
             // Se não for MP3, converter usando FFmpeg
             if ($originalExtension !== 'mp3') {
                 $inputPath = storage_path('app/public/' . $tempPath);
+                $mp3Name = $timestamp . '_audio.mp3';
                 $outputPath = storage_path('app/public/audio/atendimentos/' . $mp3Name);
 
                 // Criar diretório se não existir
@@ -48,12 +51,13 @@ class PresoController extends Controller
                 // Converter para MP3 usando FFmpeg
                 $ffmpegPath = trim((string) shell_exec('which ffmpeg'));
                 if ($ffmpegPath === '') {
-                    @unlink($inputPath);
+                    Storage::disk('public')->move($tempPath, 'audio/atendimentos/' . $finalName);
 
                     return response()->json([
-                        'response' => false,
-                        'message' => 'FFmpeg não encontrado no servidor.'
-                    ], 500);
+                        'response' => true,
+                        'data' => $finalName,
+                        'message' => 'FFmpeg não encontrado no servidor. Áudio salvo no formato original.'
+                    ]);
                 }
 
                 $command = escapeshellarg($ffmpegPath) . ' -y -i ' . escapeshellarg($inputPath) . ' -vn -ar 44100 -ac 2 -b:a 128k ' . escapeshellarg($outputPath) . ' 2>&1';
@@ -63,19 +67,23 @@ class PresoController extends Controller
                 @unlink($inputPath);
 
                 if ($returnCode !== 0) {
+                    Storage::disk('public')->move($tempPath, 'audio/atendimentos/' . $finalName);
+
                     return response()->json([
-                        'response' => false,
-                        'message' => 'Erro ao converter áudio para MP3.',
+                        'response' => true,
+                        'data' => $finalName,
+                        'message' => 'Falha na conversão para MP3. Áudio salvo no formato original.',
                         'details' => implode("\n", $output)
-                    ], 500);
+                    ]);
                 }
+
+                $finalName = $mp3Name;
             } else {
                 // Se já for MP3, apenas mover
-                $file->storeAs('audio/atendimentos', $mp3Name, 'public');
-                @unlink(storage_path('app/public/' . $tempPath));
+                Storage::disk('public')->move($tempPath, 'audio/atendimentos/' . $finalName);
             }
 
-            return response()->json(['response' => true, 'data' => $mp3Name]);
+            return response()->json(['response' => true, 'data' => $finalName]);
         }
 
         return response()->json(['response' => false, 'message' => 'Arquivo não informado.']);
