@@ -163,8 +163,8 @@
                 this.showRecorderModal = false;
             },
 
-            faliedUpload(){
-                this.showToast('error', "Erro ao Carregar Audio!!");
+            faliedUpload(message){
+                this.showToast('error', message || "Erro ao Carregar Audio!!");
             },
 
             sucessUpload(res){

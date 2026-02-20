@@ -24,7 +24,7 @@ class PresoController extends Controller
     public function uploadFile(Request $request)
     {
         $request->validate([
-            'audio' => 'required|file|mimes:webm,ogg|max:2048'  // 2 MB para 30s de áudio
+            'audio' => 'required|file|mimes:webm,ogg,mp3|max:2048'  // 2 MB para 30s de áudio
         ]);
 
         if ($request->file()) {
@@ -46,7 +46,17 @@ class PresoController extends Controller
                 }
 
                 // Converter para MP3 usando FFmpeg
-                $command = "ffmpeg -i {$inputPath} -vn -ar 44100 -ac 2 -b:a 128k {$outputPath} 2>&1";
+                $ffmpegPath = trim((string) shell_exec('which ffmpeg'));
+                if ($ffmpegPath === '') {
+                    @unlink($inputPath);
+
+                    return response()->json([
+                        'response' => false,
+                        'message' => 'FFmpeg não encontrado no servidor.'
+                    ], 500);
+                }
+
+                $command = escapeshellarg($ffmpegPath) . ' -y -i ' . escapeshellarg($inputPath) . ' -vn -ar 44100 -ac 2 -b:a 128k ' . escapeshellarg($outputPath) . ' 2>&1';
                 exec($command, $output, $returnCode);
 
                 // Remover arquivo temporário
@@ -55,7 +65,8 @@ class PresoController extends Controller
                 if ($returnCode !== 0) {
                     return response()->json([
                         'response' => false,
-                        'message' => 'Erro ao converter áudio para MP3.'
+                        'message' => 'Erro ao converter áudio para MP3.',
+                        'details' => implode("\n", $output)
                     ], 500);
                 }
             } else {

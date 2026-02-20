@@ -193,13 +193,13 @@ export default {
 
                     if (attemptCount >= this.attempts) {
                         this.isUploading = false;
+                        const errorMsg = err.response?.data?.message || err.message;
 
                         if (this.failedUpload) {
-                            this.failedUpload();
+                            this.failedUpload(errorMsg);
                         }
 
                         if (this.$toast) {
-                            const errorMsg = err.response?.data?.message || err.message;
                             this.$toast.error('Erro ao enviar áudio: ' + errorMsg);
                         }
                     }
