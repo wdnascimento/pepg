@@ -40,8 +40,9 @@ Route::group(['namespace' => 'Api' ],function(){
     Route::post('atendimento', 'AtendimentoController@store')->name('api.atendimento.create');
     Route::post('atendimento/salvaratendimento', 'AtendimentoController@saveAtendimento')->name('api.atendimento.salvar');
     Route::post('atendimento/salvarrespostaatendimento', 'AtendimentoController@saveRespostaAtendimento')->name('api.atendimento.salvarrespostaatendimento');
+    Route::post('atendimento/{id}/lido', 'AtendimentoController@marcarComoLido')->name('api.atendimento.lido');
+    Route::get('atendimento/preso/{preso_id}/naolidas', 'AtendimentoController@totalRespondidasNaoLidas')->name('api.atendimento.naolidas');
     Route::get('atendimento/preso/{preso_id}', 'AtendimentoController@atendimentoPresoId')->name('api.atendimento.preso');
     Route::get('setor/listar/{preso_id}', 'SetorController@index')->name('api.setor.listar');
     Route::get('parametro/{titulo}', 'ParametroController@index')->name('api.parametro');
-
 });

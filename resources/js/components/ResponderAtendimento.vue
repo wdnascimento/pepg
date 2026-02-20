@@ -1,12 +1,14 @@
 <template>
-                <audio-recorder class="d-flex"
-                        :upload-url="url+'api/preso/audio'"
-                        :attempts="1"
-                        :time=".5"
-                        :successful-upload="sucessUpload"
-                        :failed-upload="faliedUpload"
-                        />
-  </template>
+    <div class="d-flex flex-column align-items-center">
+        <audio-recorder class="d-flex"
+                :upload-url="url+'api/preso/audio'"
+                :attempts="1"
+                :time=".5"
+                :successful-upload="sucessUpload"
+                :failed-upload="faliedUpload"
+                />
+    </div>
+</template>
 
 <script>
 
@@ -16,16 +18,20 @@
                 atendimento_id : Number,
                 url : String
             },
+            data(){
+                return {}
+            },
             created(){
             },
             methods: {
                 sucessUpload(res){
-                    this.salvarAtendimento(res.data.data);
+                    const urlAudio = res.data.data;
+                    this.salvarAtendimento(urlAudio);
                 },
 
                 salvarAtendimento(url_audio){
                     axios.post(this.url+"api/atendimento/salvarrespostaatendimento",{
-                            
+
                             atendimento_id : this.atendimento_id,
                             lido : 1,
                             respondido : 1,
@@ -33,24 +39,24 @@
 
                     })
                     .then(res=>{
-                        Vue.toasted.show("Atendimento salvo com sucesso!!", { 
-                            theme: "toasted-primary", 
-                            position: "top-right", 
+                        Vue.toasted.show("Atendimento salvo com sucesso!!", {
+                            theme: "toasted-primary",
+                            position: "top-right",
                             duration : 2000
                         });
                     })
                     .catch(function(err){
-                            Vue.toasted.show("Erro!!"+err, { 
-                                theme: "toasted-primary", 
-                                position: "top-right", 
+                            Vue.toasted.show("Erro!!"+err, {
+                                theme: "toasted-primary",
+                                position: "top-right",
                                 duration : 2000
                             });
                     })
                 },
                 faliedUpload(){
-                    Vue.toasted.show("Erro ao Carregar Audio!!", { 
-                        theme: "toasted-primary", 
-                        position: "top-right", 
+                    Vue.toasted.show("Erro ao Carregar Audio!!", {
+                        theme: "toasted-primary",
+                        position: "top-right",
                         duration : 2000
                     });
                 },

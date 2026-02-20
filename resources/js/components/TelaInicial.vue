@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-4">
         <div class="row text-center py-3">
-            <h1 class="w-100 text-primary">Marcar Atendimentos</h1>
+            <h1 class="w-100 text-dark">Registros de Atendimentos</h1>
         </div>
         <div class="row">
             <div class="col-12">
@@ -29,14 +29,15 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-4 text-center">
-                                <img v-if="preso.foto" :src="preso.foto" alt="Foto do preso" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
-                                <div v-else class="bg-secondary rounded-circle d-inline-block" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
-                                    <span class="text-white">Sem foto</span>
+                                <img v-if="preso.foto" :src="preso.foto" alt="Foto do preso" class="img-fluid rounded-3" style="width: 180px; height: 180px; object-fit: cover;">
+                                <div v-else class="bg-secondary rounded-3 d-flex align-items-center justify-content-center mx-auto" style="width: 180px; height: 180px;">
+                                    <i class="fas fa-user text-white" style="font-size: 7rem; line-height: 1;"></i>
                                 </div>
                             </div>
                             <div class="col-8">
-                                <p class="h4 mb-2">Prontuário: <strong>{{ preso.prontuario }}</strong></p>
-                                <p class="h4">Nome: {{ preso.nome }}</p>
+                                <p class="dados-preso mb-2">Prontuário: <strong>{{ preso.prontuario }}</strong></p>
+                                <p class="dados-preso mb-2">KIT: <strong>{{ preso.kit }}</strong></p>
+                                <p class="dados-preso mb-0">Nome: <strong>{{ preso.nome }}</strong></p>
                             </div>
                         </div>
                     </div>
@@ -48,16 +49,23 @@
                 <div class="alert alert-primary text-center" role="alert">Nenhum preso selecionado.</div>
             </div>
             <div v-if="preso.show" class="col-md-6 mb-2">
-                <router-link to="/marcaratendimento" class="btn btn-success w-100 p-3 h5" :url="url">Marcar Atendimentos</router-link>
+                <router-link to="/marcaratendimento" class="btn btn-success w-100 p-3 btn-texto-grande" :url="url">Marcar<br>Atendimentos</router-link>
             </div>
             <div v-if="preso.show" class="col-md-6 mb-2">
-                <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 h5" :url="url">Resposta de Atendimentos</router-link>
+                <router-link to="/buscaratendimentos" class="btn btn-primary w-100 p-3 btn-texto-grande" :url="url">Resposta de<br>Atendimentos</router-link>
             </div>
         </div>
         <router-view v-if="preso.show" :preso="preso" :url="url"></router-view>
         <div class="row mt-3">
-            <div class="col-12">
-                <button type="button" class="btn btn-danger w-100 p-3 h5" @click="limparCampos">SAIR</button>
+            <div class="col-md-6 mb-2">
+                <button type="button" class="btn btn-primary w-100 p-3 btn-texto-grande" @click="voltarPaginaInicial">
+                    VOLTAR
+                </button>
+            </div>
+            <div class="col-md-6 mb-2">
+                <button type="button" class="btn btn-danger w-100 p-3 btn-texto-grande" @click="sairSemCache">
+                    SAIR
+                </button>
             </div>
         </div>
     </div>
@@ -81,6 +89,16 @@
     .btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-texto-grande {
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+
+    .dados-preso {
+        font-size: 2rem;
+        line-height: 1.2;
     }
 </style>
 
@@ -158,6 +176,17 @@
                 this.preso.nome= '';
                 this.preso.foto= '';
                 this.preso.show = false;
+            },
+
+            voltarPaginaInicial(){
+                const prontuarioAtual = this.preso.prontuario || this.form.prontuario;
+                this.form.prontuario = prontuarioAtual || '';
+                this.initRoute();
+            },
+
+            sairSemCache(){
+                this.limparCampos();
+                this.initRoute();
             },
 
             initRoute() {

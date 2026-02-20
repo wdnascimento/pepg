@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import router from './js/Router';
 
 // Importar componentes

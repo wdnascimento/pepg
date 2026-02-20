@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
 
 class ArquivoSigepController extends Controller
-{   
+{
     public $params;
     public $atendimento;
     public $arquivo_sigep;
@@ -26,7 +26,7 @@ class ArquivoSigepController extends Controller
     public $preso;
     public $galeria;
     public $cubiculo;
-    
+
 
     public function __construct(ArquivoSigep $arquivo_sigeps, Preso $presos, PresoAlojamento $presos_alojamentos, Galeria $galerias, Cubiculo $cubiculos)
     {
@@ -114,49 +114,51 @@ class ArquivoSigepController extends Controller
 
         $data = $this->arquivo_sigep->find($id);
         if ($data->importado == 0) {
-            // galerias 
+            // galerias
             $GALERIAS = $this->galeria->select(DB::raw('UPPER(titulo) as titulo'))->get()->toArray();
 
-                $url = Storage::url($data->titulo);
-                    $streamSSL = stream_context_create(array(
-                        "ssl" => array(
-                            "verify_peer" => false,
-                            "verify_peer_name" => false
-                        )
-                    ));
+                $filePath = Storage::disk('public')->path($data->titulo);
+                if (!is_file($filePath)) {
+                    return redirect()->back()->withErrors(['Arquivo não encontrado no armazenamento.']);
+                }
 
-                    
-
-                    $file_handle = fopen($url, 'r', false, $streamSSL);
+                    $file_handle = fopen($filePath, 'r');
                     $i=0;
-                    while (!feof($file_handle)) {
-                        if(!isset($csv)){
-                            $csv = [];
-                            $csv  = fgetcsv($file_handle, 0, ',');
-                        }else{
-                            $csv  = fgetcsv($file_handle, 0, ',');
+                    $isHeader = true;
+                    while (($csv = fgetcsv($file_handle, 0, ',')) !== false) {
+                        if ($isHeader) {
+                            $isHeader = false;
+                            continue;
+                        }
+                        if (empty($csv) || !isset($csv[0]) || trim($csv[0]) === '') {
+                            continue;
+                        }
+                        if (count($csv) < 11) {
+                            continue;
+                        }
+
                             $nome_prontuario = preg_split("/[\-]/", $csv[0]);
-                            $prontuarios[] = trim($nome_prontuario[0]);
-                            $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0]);
-                            $tmp_presos[$i]['nome']             = trim($nome_prontuario[1]);
-                            $tmp_presos[$i]['rg']               =  trim($csv[1]);
-                            $tmp_presos[$i]['data_nascimento']  =  \Carbon\Carbon::parse(strtotime(trim($csv[2])))->format('Y-m-d');
-                            $tmp_presos[$i]['mae']              =  trim($csv[3]);
-                            $tmp_presos[$i]['artigos']           =  trim($csv[4]);
-                            $tmp_presos[$i]['situacao']  =  trim($csv[5]);
-                            $alojamento =  preg_split("/(\/\s)/", $csv[6]);
-                            $tmp_presos[$i]['bloco']            =  trim($alojamento[0]);
-                            $tmp_presos[$i]['galeria']          =  trim($alojamento[1]);
-                            $tmp_presos[$i]['cubiculo']         =  trim($alojamento[2]);
-                            $tmp_presos[$i]['origem']           =  trim($csv[7]);
-                            $tmp_presos[$i]['data_prisao']      =  \Carbon\Carbon::parse(strtotime(trim($csv[8])))->format('Y-m-d');
-                            $tmp_presos[$i]['data_depen']       =  \Carbon\Carbon::parse(strtotime(trim($csv[9])))->format('Y-m-d');
-                            $tmp_presos[$i]['data_entrada']     =  \Carbon\Carbon::parse(strtotime(trim($csv[10])))->format('Y-m-d');
+                            $prontuarios[] = trim($nome_prontuario[0] ?? '');
+                            $tmp_presos[$i]['prontuario'] = trim($nome_prontuario[0] ?? '');
+                            $tmp_presos[$i]['nome']             = trim($nome_prontuario[1] ?? '');
+                            $tmp_presos[$i]['rg']               =  trim($csv[1] ?? '');
+                            $tmp_presos[$i]['data_nascimento']  =  \Carbon\Carbon::parse(strtotime(trim($csv[2] ?? '')))->format('Y-m-d');
+                            $tmp_presos[$i]['mae']              =  trim($csv[3] ?? '');
+                            $tmp_presos[$i]['artigos']           =  trim($csv[4] ?? '');
+                            $tmp_presos[$i]['situacao']  =  trim($csv[5] ?? '');
+                            $alojamento =  preg_split("/(\/\s)/", $csv[6] ?? '');
+                            $tmp_presos[$i]['bloco']            =  trim($alojamento[0] ?? '');
+                            $tmp_presos[$i]['galeria']          =  trim($alojamento[1] ?? '');
+                            $tmp_presos[$i]['cubiculo']         =  trim($alojamento[2] ?? '');
+                            $tmp_presos[$i]['origem']           =  trim($csv[7] ?? '');
+                            $tmp_presos[$i]['data_prisao']      =  \Carbon\Carbon::parse(strtotime(trim($csv[8] ?? '')))->format('Y-m-d');
+                            $tmp_presos[$i]['data_depen']       =  \Carbon\Carbon::parse(strtotime(trim($csv[9] ?? '')))->format('Y-m-d');
+                            $tmp_presos[$i]['data_entrada']     =  \Carbon\Carbon::parse(strtotime(trim($csv[10] ?? '')))->format('Y-m-d');
                             // VERIFICA SE A GALERIA EXISTE
 
                             $galerias = array_search(strtoupper($tmp_presos[$i]['galeria']), array_column($GALERIAS, 'titulo'));
                             if ($galerias !== false) {
-                                // VERIFICA SE O PRESO ESTÁ CADASTRADO 
+                                // VERIFICA SE O PRESO ESTÁ CADASTRADO
 
                                 $presos = $this->preso->select('id')->where('prontuario', $tmp_presos[$i]['prontuario'])->first();
 
@@ -174,7 +176,7 @@ class ArquivoSigepController extends Controller
 
                                 $cubiculo_id =  $this->cubiculo->getCubiculoIdGaleriaCubiculo($tmp_presos[$i]['galeria'], $tmp_presos[$i]['cubiculo'])->first();
 
-                                // LIMPA ALOJAMENTOS 
+                                // LIMPA ALOJAMENTOS
                                 $alojamento = $this ->preso_alojamento
                                                     ->where('preso_id',$tmp_presos[$i]['id'])
                                                     ->where('data_saida',NULL)
@@ -216,7 +218,6 @@ class ArquivoSigepController extends Controller
                                 }
                             }
                             $i++;
-                        }
                     }
                     fclose($file_handle);
         } else {

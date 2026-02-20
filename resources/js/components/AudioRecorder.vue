@@ -155,7 +155,7 @@ export default {
 
             const formData = new FormData();
             // Enviar com extensão real do navegador
-            const extension = this.audioBlob.type.includes('webm') ? 'webm' : 
+            const extension = this.audioBlob.type.includes('webm') ? 'webm' :
                             this.audioBlob.type.includes('ogg') ? 'ogg' : 'mp3';
             const filename = `recording_${Date.now()}.${extension}`;
             formData.append('audio', this.audioBlob, filename);

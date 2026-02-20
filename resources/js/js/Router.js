@@ -1,11 +1,12 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import MarcarAtendimento from '../components/MarcarAtendimento.vue'
 import Atendimentos from '../components/Atendimentos.vue'
+import ResumoMensagens from '../components/ResumoMensagens.vue'
 
 const routes = [
     {
         path: '/',
-        redirect: '/marcaratendimento'
+        component: ResumoMensagens
     },
     {
         path: '/marcaratendimento',
@@ -18,7 +19,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory('/atendimento/'),
     routes
 });
 

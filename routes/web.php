@@ -21,9 +21,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
 });
 
-Route::get('/atendimento', function () {
+Route::get('/atendimento/{any?}', function () {
     return view('audio.index');
-});
+})->where('any', '.*');
 
 Route::get('/axios', function () {
     return view('axios');
@@ -73,7 +73,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     Route::get('preso/historico/{preso_id}', 'PresoController@historico')->name('admin.preso.historico');
     Route::get('preso/edit/{id}', 'PresoController@edit')->name('admin.preso.edit');
     Route::post('preso/store', 'PresoController@store')->name('admin.preso.store');
-    
+
     //Mudancas
     Route::post('mudanca/store', 'MudancaController@store')->name('admin.mudanca.store');
     // Route::get('mudancas', 'MudancasController@index')->name('admin.mudancas.index');
@@ -124,7 +124,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     Route::get('controleacesso/show/{id}', 'ControleAcessoController@show')->name('admin.controleacesso.show');
     Route::put('controleacesso/update/{id}', 'ControleAcessoController@update')->name('admin.controleacesso.update');
     Route::delete('controleacesso/destroy/{id}', 'ControleAcessoController@destroy')->name('admin.controleacesso.destroy');
-    
+
     //ControleAcesso_extra
     Route::get('controleacesso/exit/{id}', 'ControleAcessoController@exit')->name('admin.controleacesso.exit');
     Route::put('controleacesso/exit/{id}', 'ControleAcessoController@updateexit')->name('admin.controleacesso.updateexit');
@@ -137,7 +137,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin
     Route::get('produto/show/{id}', 'ProdutoController@show')->name('admin.produto.show');
     Route::put('produto/update/{id}', 'ProdutoController@update')->name('admin.produto.update');
     Route::delete('produto/destroy/{id}', 'ProdutoController@destroy')->name('admin.produto.destroy');
-    
+
     //Controle de kit
     Route::get('preso_kit', 'KitController@index')->name('admin.preso_kit.index');
     //

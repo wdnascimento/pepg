@@ -1,6 +1,5 @@
 <template>
     <div class="audio-player">
-        <h4 class="text-center w-100">Resposta em Áudio:</h4>
         <audio
             ref="audioElement"
             :src="src"
@@ -19,6 +18,14 @@
                 <i class="fas fa-play"></i> Ouvir
             </button>
 
+            <a
+                v-if="!isPlaying && showDownloadButton"
+                :href="src"
+                :download="downloadFileName"
+                class="btn btn-primary btn-lg">
+                <i class="fas fa-download"></i> Baixar áudio
+            </a>
+
             <button
                 @click="togglePlay"
                 class="btn btn-warning btn-lg"
@@ -29,7 +36,8 @@
             <button
                 @click="replay"
                 class="btn btn-info btn-lg"
-                :disabled="!isLoaded">
+                :disabled="!isLoaded"
+                v-if="showReplayButton">
                 <i class="fas fa-redo"></i> Ouvir Novamente
             </button>
         </div>
@@ -54,10 +62,19 @@
 <script>
 export default {
     name: 'AudioPlayer',
+    emits: ['played'],
     props: {
         src: {
             type: String,
             required: true
+        },
+        repeat: {
+            type: [Boolean, String],
+            default: true
+        },
+        download: {
+            type: [Boolean, String],
+            default: false
         }
     },
     data() {
@@ -78,6 +95,28 @@ export default {
         progressPercent() {
             if (!this.duration) return 0;
             return (this.currentTime / this.duration) * 100;
+        },
+        showReplayButton() {
+            if (this.repeat === false) return false;
+            if (typeof this.repeat === 'string') {
+                const value = this.repeat.trim().toLowerCase();
+                return value !== 'false' && value !== '0' && value !== 'no';
+            }
+            return true;
+        },
+        showDownloadButton() {
+            if (this.download === true) return true;
+            if (typeof this.download === 'string') {
+                const value = this.download.trim().toLowerCase();
+                return value === 'true' || value === '1' || value === 'yes';
+            }
+            return false;
+        },
+        downloadFileName() {
+            if (!this.src) return 'audio.mp3';
+            const cleanSrc = this.src.split('?')[0];
+            const parts = cleanSrc.split('/');
+            return parts[parts.length - 1] || 'audio.mp3';
         }
     },
     methods: {
@@ -86,6 +125,7 @@ export default {
                 this.$refs.audioElement.pause();
             } else {
                 this.$refs.audioElement.play();
+                this.$emit('played');
             }
             this.isPlaying = !this.isPlaying;
         },

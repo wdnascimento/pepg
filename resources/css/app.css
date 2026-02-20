@@ -76,10 +76,12 @@ html, body {
 
 /* Toast Styles */
 .Vue-Toastification__container {
-    z-index: 9999;
+    z-index: 2147483647 !important;
+    position: fixed !important;
 }
 
 .Vue-Toastification__toast {
+    z-index: 2147483647 !important;
     padding: 16px;
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

@@ -101,31 +101,30 @@ class ArquivoVisitaSigepController extends Controller
         ];
 
         $data = $this->arquivo_visita_sigep->find($id);
-       
+
         if ($data->importado == 0) {
 
             // GET NO ARQUIVO
 
-            $url = Storage::url($data->titulo);
-            
-            // PARAMETRIZAÇÃO
+            $filePath = Storage::disk('public')->path($data->titulo);
+            if (!is_file($filePath)) {
+                return redirect()->back()->withErrors(['Arquivo não encontrado no armazenamento.']);
+            }
 
-            $streamSSL = stream_context_create(array(
-                "ssl" => array(
-                    "verify_peer" => false,
-                    "verify_peer_name" => false
-                )
-            ));
+            // PARAMETRIZAÇÃO
 
             // INICIALIZANDO VARIÁVEIS
 
             $csv = [];
-            
-            // MANIPULANDO ARQUIVO
-            $file_handle = fopen($url, 'r', false, $streamSSL);
 
-            while (!feof($file_handle)) {
-                $csv[] = fgetcsv($file_handle, 0, ';');
+            // MANIPULANDO ARQUIVO
+            $file_handle = fopen($filePath, 'r');
+
+            while (($row = fgetcsv($file_handle, 0, ';')) !== false) {
+                if (empty($row) || !isset($row[0]) || trim($row[0]) === '') {
+                    continue;
+                }
+                $csv[] = $row;
             }
             fclose($file_handle);
 
@@ -144,30 +143,30 @@ class ArquivoVisitaSigepController extends Controller
                 $tmp_presos[$i]['rg'] = trim($v[16]);
                 $tmp_presos[$i]['cpf'] = trim($v[17]);
                 //  dd($csv);
-                if($tmp_presos[$i]['preso_id']){ // TESTA SE EXISTE O PRESO                
-               
+                if($tmp_presos[$i]['preso_id']){ // TESTA SE EXISTE O PRESO
+
                     if($tmp_familiar=$preso_familiares->where('credencial', $tmp_presos[$i]['credencial'])->first()){
-                        
+
                         $update = $preso_familiares->find($tmp_familiar->id)->update($tmp_presos[$i]);
-                    
+
                         if (!$update) {
                             return redirect()->route($this->params['main_route'] . '.create')->withErrors(['Falha ao fazer Inserir.']);
-                        }     
+                        }
                     }else{
                         $insert = $preso_familiares->create($tmp_presos[$i]);
-                    
+
                         if (!$insert) {
                             return redirect()->route($this->params['main_route'] . '.create')->withErrors(['Falha ao fazer Inserir.']);
                         }
-                        
-                    }  
+
+                    }
                 }
 
-            } 
+            }
             if (!$data->update(['importado' => 1])) {
-               
+
                 return redirect()->back()->withErrors(['Erro modificar status da importação.']);
-            } 
+            }
         }
          return redirect()->route($this->params['main_route'].'.index');
     }

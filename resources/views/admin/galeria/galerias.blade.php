@@ -26,7 +26,7 @@
                         <i class="fas fa-bars mr-2"></i>GALERIAS
                     </h4>
                     <div class="row px-2">
-                        <div id="1" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 bg-primary text-center text-white">
+                        <div id="1" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 m-2 bg-primary text-center text-white">
                             <div>
                                 <i class="fas fa-bars mb-2" style="font-size: 2rem;"></i>
                                 <br>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <div id="2" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 bg-info text-center text-white">
+                        <div id="2" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 m-2 bg-info text-center text-white">
                             <div>
                                 <i class="fas fa-bars mb-2" style="font-size: 2rem;"></i>
                                 <br>
@@ -42,7 +42,7 @@
                             </div>
                         </div>
 
-                        <div id="3" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 bg-success text-center text-white">
+                        <div id="3" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 m-2 bg-success text-center text-white">
                             <div>
                                 <i class="fas fa-bars mb-2" style="font-size: 2rem;"></i>
                                 <br>
@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div id="4" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 bg-warning text-center text-dark">
+                        <div id="4" class="galeria galeria-lg rounded col-md-3 col-sm-6 p-3 m-2 bg-warning text-center text-dark">
                             <div>
                                 <i class="fas fa-bars mb-2" style="font-size: 2rem;"></i>
                                 <br>
@@ -65,7 +65,7 @@
                     <h4 class="text-center font-weight-bold mb-4">
                         <i class="fas fa-lock mr-2"></i>ISOLAMENTOS
                     </h4>
-                    <div class="row px-5 justify-content-center">
+                    <div class="row px-5 justify-content-between">
                         <div id="5" class="galeria galeria-sm rounded col-lg-1 col-md-2 col-sm-4 col-6 p-2 bg-danger text-center text-white mx-2">
                             <div>
                                 <i class="fas fa-lock mb-2" style="font-size: 1.5rem;"></i>
@@ -135,7 +135,7 @@
     }
 
     .galeria-lg {
-        min-height: 180px;
+        min-height: 280px;
         margin-bottom: 15px;
     }
 
